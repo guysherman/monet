@@ -1,0 +1,19 @@
+{
+    "version": "0.1.0",
+    "tasks": [
+        {
+            "taskName": "Build",
+            "command": "./waf",
+            "args": [],
+            "isShellCommand": true,
+            "isBackground": true,
+            "isBuildCommand": true
+        },
+        {
+            "taskName": "Configure",
+            "command": "./waf",
+            "args": ["configure"],
+            "isShellCommand": true
+        }
+    ]
+}

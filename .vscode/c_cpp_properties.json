@@ -1,0 +1,100 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceRoot}",
+                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
+                "/usr/local/include",
+                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include",
+                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+                "/usr/include"
+            ],
+            "defines": [],
+            "browse": {
+                "path": [
+                    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
+                    "/usr/local/include",
+                    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include",
+                    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+                    "/usr/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "clang-x64",
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ]
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceRoot}",
+                "${workspaceRoot}/src",
+                "/usr/include",
+                "/usr/local/include",
+                "/usr/local/include/Rocket",
+                "/usr/local/include/Rocket/Controls",
+                "/usr/local/include/Rocket/Core",
+                "/usr/local/include/Rocket/Core/BitmapFont",
+                "/usr/local/include/Rocket/Core/FreeType",
+                "/usr/local/include/Rocket/Debugger",
+                "/usr/include/c++/7.2.0",
+                "/usr/include/c++/7.2.0/backward",
+                "/usr/include/c++/7.2.0/bits",
+                "/usr/include/c++/7.2.0/debug",
+                "/usr/include/c++/7.2.0/decimal",
+                "/usr/include/c++/7.2.0/experimental",
+                "/usr/include/c++/7.2.0/experimental/bits",
+                "/usr/include/c++/7.2.0/ext",
+                "/usr/include/c++/7.2.0/ext/pb_ds",
+                "/usr/include/c++/7.2.0/parallel",
+                "/usr/include/c++/7.2.0/profile",
+                "/usr/include/c++/7.2.0/profile/impl",
+                "/usr/include/c++/7.2.0/tr1",
+                "/usr/include/c++/7.2.0/tr2",
+                "/usr/include/c++/7.2.0/x86_64-pc-linux-gnu",
+                "/usr/include/c++/7.2.0/x86_64-pc-linux-gnu/bits",
+                "/usr/include/c++/7.2.0/x86_64-pc-linux-gnu/ext",
+                "/usr/include/linux",
+                "/usr/include/c++/7.2.0"
+            ],
+            "defines": [],
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}",
+                    "${workspaceRoot}/src"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceRoot}",
+                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE"
+            ],
+            "browse": {
+                "path": [
+                    "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 3
+}
