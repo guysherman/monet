@@ -21,6 +21,7 @@ Get the deps:
 * Python
 * GLEW
 * GLFW
+* GLM
 * cpp-check
 * libpng
 * libtga
