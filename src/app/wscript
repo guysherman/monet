@@ -22,6 +22,7 @@ def configure(conf):
 	conf.check_cfg(package='glew', uselib_store='GLEW', args=['--cflags', '--libs'])
 	conf.check_cfg(package='freetype2', uselib_store='FT', args=['--cflags', '--libs'])
 	conf.check_cfg(package='libpng', uselib_store='PNG', args=['--cflags', '--libs'])
+	conf.check_cfg(package='glm', uselib_store='GLM', args=['--cflags', '--libs'])
 	if sys.platform == 'darwin':
 		conf.env.LIBPATH_BOOST = ['/usr/local/lib']
 		conf.env.INCLUDES_BOOST = ['/usr/local/include']
@@ -42,6 +43,6 @@ def build(bld):
 				lib = libs,
 				target = 'monet-photo',
 				install_path = '${BINDIR}',
-				use=['GLEW', 'GLFW', 'BOOST', 'FT', 'PNG', 'TGA', 'monet-ui', 'monet-renderer'],
+				use=['GLEW', 'GLFW', 'GLM', 'BOOST', 'FT', 'PNG', 'TGA', 'monet-ui', 'monet-renderer'],
 				defines = defines,
 				features="cxx cxxprogram")

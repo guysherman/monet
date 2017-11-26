@@ -24,6 +24,7 @@
 // C++ Standard Headers
 #include <string>
 #include <iostream>
+#include <memory>
 
 // C Standard Headers
 
@@ -39,6 +40,7 @@
 // Our Headers
 
 #include "../include/ui/AppDelegate.h"
+#include "../include/ui/Window.h"
 
 namespace monet
 {
@@ -51,43 +53,59 @@ namespace monet
 			std::cerr << "Error: " << description << std::endl;
 		}
 	
-		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		static void key_callback(GLFWwindow* nativeWindow, int key, int scancode, int action, int mods)
 		{
 			// if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			// 	glfwSetWindowShouldClose(window, GLFW_TRUE);
 			if (nullptr != AppDelegate::instance)
 			{
-				AppDelegate::instance->KeyEvent(window, key, scancode, action, mods);
+				auto window = AppDelegate::instance->GetWindow(nativeWindow);
+				if (nullptr != window)
+				{
+					window->KeyEvent(key, scancode, action, mods);
+				}
 			}
 		}
 	
-		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+		static void mouse_button_callback(GLFWwindow* nativeWindow, int button, int action, int mods)
 		{
 			if (nullptr != AppDelegate::instance)
 			{
-				AppDelegate::instance->MouseButtonEvent(window, button, action, mods);
+				auto window = AppDelegate::instance->GetWindow(nativeWindow);
+				if (nullptr != window)
+				{
+					window->MouseButtonEvent(button, action, mods);
+				}
 			}
 		}
 	
-		static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+		static void cursor_position_callback(GLFWwindow* nativeWindow, double xpos, double ypos)
 		{
 			if(nullptr != AppDelegate::instance)
 			{
-				AppDelegate::instance->MousePositionEvent(window, xpos, ypos);
+				auto window = AppDelegate::instance->GetWindow(nativeWindow);
+				if (nullptr != window)
+				{
+					window->MousePositionEvent(xpos, ypos);
+				}
 			}
 		}
 	
-		static void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+		static void scroll_callback(GLFWwindow *nativeWindow, double xoffset, double yoffset)
 		{
 			if (nullptr != AppDelegate::instance)
 			{
-				AppDelegate::instance->ScrollEvent(window, xoffset, yoffset);
+				auto window = AppDelegate::instance->GetWindow(nativeWindow);
+				if (nullptr != window)
+				{
+					window->ScrollEvent(xoffset, yoffset);
+				}
 			}
 		}
 	
-		AppDelegate::AppDelegate(int width, int height, std::string windowTitle)
+		AppDelegate::AppDelegate()
 		{
-			this->windowTitle = windowTitle;
+			
 			glfwSetErrorCallback(error_callback);
 			/* start GL context and O/S window using the GLFW helper library */
 			if ( !glfwInit() ) {
@@ -95,59 +113,65 @@ namespace monet
 				exit(EXIT_FAILURE);
 			}
 	
-		#ifndef WIN32
-			glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-			glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 2 );
-			glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
-			glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-		#endif
-	
-			window = glfwCreateWindow( width, height, windowTitle.c_str(), NULL, NULL );
-			if ( !window ) {
-				fprintf( stderr, "ERROR: could not open window with GLFW3\n" );
-				glfwTerminate();
-				exit(EXIT_FAILURE);
-			}
+		
 
-			glfwSetKeyCallback(window, key_callback);
-			glfwSetMouseButtonCallback(window, mouse_button_callback);
-			glfwSetCursorPosCallback(window, cursor_position_callback);
-			glfwSetScrollCallback(window, scroll_callback);
+			
 		}
 	
 		AppDelegate::~AppDelegate()
 		{
 	
 		}
-	
-		void AppDelegate::KeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
+
+		std::shared_ptr<monet::ui::Window> AppDelegate::GetWindow(GLFWwindow *nativeWindow)
 		{
-			if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+			auto itWindow = windowMappings.find(nativeWindow);
+			if (itWindow != windowMappings.end())
 			{
-				glfwSetWindowShouldClose(window, GLFW_TRUE);
+				return itWindow->second;
 			}
+
+			return nullptr;
 		}
 	
-		void AppDelegate::MouseButtonEvent(GLFWwindow *window, int button, int action, int mods)
-		{
-			double xpos, ypos;
-			glfwGetCursorPos(window, &xpos, &ypos);
+		// void AppDelegate::KeyEvent(GLFWwindow *window, int key, int scancode, int action, int mods)
+		// {
+		// 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		// 	{
+		// 		glfwSetWindowShouldClose(window, GLFW_TRUE);
+		// 	}
+		// }
+	
+		// void AppDelegate::MouseButtonEvent(GLFWwindow *window, int button, int action, int mods)
+		// {
+		// 	double xpos, ypos;
+		// 	glfwGetCursorPos(window, &xpos, &ypos);
 			
-		}
+		// }
 	
-		void AppDelegate::MousePositionEvent(GLFWwindow *window, double xpos, double ypos)
-		{
+		// void AppDelegate::MousePositionEvent(GLFWwindow *window, double xpos, double ypos)
+		// {
 			
-		}
+		// }
 	
-		void AppDelegate::ScrollEvent(GLFWwindow *window, double xoffset, double yoffset)
-		{
+		// void AppDelegate::ScrollEvent(GLFWwindow *window, double xoffset, double yoffset)
+		// {
 			
-		}
+		// }
 	
-		void AppDelegate::Run()
+		void AppDelegate::Run(std::shared_ptr<monet::ui::Window> window)
 		{
-			while ( !glfwWindowShouldClose( window ) )
+			auto glfwWindow = window->GetNativeWindow();
+
+			windowMappings[glfwWindow] = window;
+			
+			glfwSetKeyCallback(glfwWindow, key_callback);
+			glfwSetMouseButtonCallback(glfwWindow, mouse_button_callback);
+			glfwSetCursorPosCallback(glfwWindow, cursor_position_callback);
+			glfwSetScrollCallback(glfwWindow, scroll_callback);
+			
+			
+			while ( !glfwWindowShouldClose( glfwWindow ) )
 			{
 				
 				

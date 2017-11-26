@@ -39,6 +39,7 @@
 		"utility": "cpp",
 		"new": "cpp",
 		"optional": "cpp",
-		"*.ipp": "cpp"
+		"*.ipp": "cpp",
+		"iostream": "cpp"
 	}
 }

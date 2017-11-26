@@ -30,15 +30,19 @@
 // Boost Headers
 
 // 3rd Party Headers
-
+#define GLM_PRECISION_MEDIUMP_INT
+#define GLM_PRECISION_HIGHP_FLOAT
+#include <glm/vec2.hpp>
 
 // GTK Headers
 
 
 // Our Headers
 #include <ui/AppDelegate.h>
+#include <ui/Window.h>
 
 int main(int argc, char **argv) {
-	monet::ui::AppDelegate::instance = new monet::ui::AppDelegate(1280, 1024, "Monet Photo");
-	monet::ui::AppDelegate::instance->Run();
+	monet::ui::AppDelegate::instance = new monet::ui::AppDelegate();
+	auto window = std::shared_ptr<monet::ui::Window>( new monet::ui::Window("Monet Photo", glm::vec2(1280, 1024)) );
+	monet::ui::AppDelegate::instance->Run(window);
 }

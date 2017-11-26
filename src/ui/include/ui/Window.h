@@ -1,5 +1,5 @@
-#ifndef __APPDELEGATE_H__
-#define __APPDELEGATE_H__
+#ifndef __WINDOW_H__
+#define __WINDOW_H__
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -24,9 +24,8 @@
 
 
 // C++ Standard Headers
-#include <string>
 #include <memory>
-#include <map>
+#include <string>
 // C Standard Headers
 
 
@@ -36,6 +35,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#define GLM_PRECISION_MEDIUMP_INT
+#define GLM_PRECISION_HIGHP_FLOAT
+#include <glm/vec2.hpp>
 // GTK Headers
 
 
@@ -43,39 +45,32 @@
 
 
 
-#ifdef __APPLE__
-#define SCROLL_SENSITIVITY 1.0f
-#else 
-#define SCROLL_SENSITIVITY 0.05f
-#endif
-
-
 namespace monet
 {
-	
 	namespace ui
 	{
 		
-		class Window;
-
-		class AppDelegate
+		class Window
 		{
 		public:
-			AppDelegate();
-			virtual ~AppDelegate();
-	
-			void Run(std::shared_ptr<monet::ui::Window> window);
-			std::shared_ptr<monet::ui::Window> GetWindow(GLFWwindow *nativeWindow);
-	
-			static AppDelegate *instance;
-	
+
+			Window(std::string windowTitle, glm::vec2 windowSize);
+			virtual ~Window();
+
+			GLFWwindow *GetNativeWindow();
+
+			void MouseButtonEvent(int button, int action, int mods);
+			void MousePositionEvent(double xpos, double ypos);
+			void ScrollEvent(double xoffset, double yoffset);
+			void KeyEvent(int key, int scancode, int action, int mods);
+			
 		private:
-			std::map< GLFWwindow*, std::shared_ptr<monet::ui::Window> > windowMappings;
-	
-	
+			GLFWwindow *nativeWindow;
+			//AppDelegate *appDelegate;
+			std::string windowTitle;
+			glm::vec2 windowSize;
 		};
 	}
-	
 }
 
-#endif // __APPDELEGATE_H__
+#endif // __WINDOW_H__
