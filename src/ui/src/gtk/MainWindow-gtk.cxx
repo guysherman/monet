@@ -19,7 +19,8 @@
 
 	Contact the author via https://github.com/guysherman
 */
-#ifdef __linux__
+#include "../../include/ui/PlatformConfig.h"
+#ifdef UI_PLATFORM_GTK
 
 // C++ Standard Headers
 #include <memory>
@@ -37,7 +38,7 @@
 
 // Our Headers
 
-#include "../../include/ui/linux/MainWindow-linux.h"
+#include "../../include/ui/gtk/MainWindow-gtk.h"
 
 namespace monet
 {

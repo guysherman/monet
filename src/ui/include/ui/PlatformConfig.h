@@ -1,3 +1,5 @@
+#ifndef _PLATFORMCONFIG_H_
+#define _PLATFORMCONFIG_H_
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -22,9 +24,8 @@
 
 
 // C++ Standard Headers
-#include <memory>
-#include <string>
-#include <iostream>
+
+
 // C Standard Headers
 
 
@@ -36,36 +37,11 @@
 
 
 // Our Headers
-#include "../include/ui/PlatformConfig.h"
-#include "../include/ui/MainWindow.h"
 
-#ifdef UI_PLATFORM_GTK
-	#include "../include/ui/gtk/MainWindow-gtk.h"
+#if defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+#define UI_PLATFORM_GTK
 #endif
 
-namespace monet
-{
-	namespace ui
-	{
-		MainWindow::MainWindow()
-		{
 
-		}
 
-		MainWindow::~MainWindow()
-		{
-
-		}
-
-		
-		std::unique_ptr<MainWindow> MainWindow::Create(int argc, char *argv[])
-		{
-#ifdef UI_PLATFORM_GTK
-			return std::unique_ptr<MainWindow>(new MainWindowLinux(argc, argv));
-#else
-			return std::unique_ptr<MainWindow>(nullptr);
-#endif
-		}
-
-	}
-}
+#endif // _PLATFORMCONFIG_H_

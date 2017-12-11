@@ -5,17 +5,17 @@ import sys
 
 def options(opt):
 	opt.recurse(['ui'])
-	opt.recurse(['renderer'])
+	#opt.recurse(['renderer'])
 	opt.recurse(['app'])
 
 
 def configure(conf):
 	conf.recurse(['ui'])
-	conf.recurse(['renderer'])
+	#conf.recurse(['renderer'])
 	conf.recurse(['app'])
 
 
 def build(bld):
 	bld.recurse(['ui'])
-	bld.recurse(['renderer'])
+	#bld.recurse(['renderer'])
 	bld.recurse(['app'])

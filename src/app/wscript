@@ -3,7 +3,7 @@ import waftools
 import sys
 
 
-libs = ['pthread', 'tga']
+libs = ['pthread']
 linkerflags = []
 if sys.platform == 'darwin':
 	linkerflags = ['-framework', 'GLUT', '-framework', 'OpenGL']
@@ -44,6 +44,6 @@ def build(bld):
 				lib = libs,
 				target = 'monet-photo',
 				install_path = '${BINDIR}',
-				use=['GLEW', 'GLFW', 'GLM', 'BOOST', 'FT', 'PNG', 'TGA', 'monet-ui', 'monet-renderer'],
+				use=['GLEW', 'GLFW', 'GLM', 'BOOST', 'FT', 'PNG', 'monet-ui', 'monet-renderer'],
 				defines = defines,
 				features="cxx cxxprogram")
