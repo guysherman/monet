@@ -1,5 +1,5 @@
-#ifndef __APPDELEGATE_H__
-#define __APPDELEGATE_H__
+#ifndef _MAINWINDOWLINUX_H_
+#define _MAINWINDOWLINUX_H_
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -24,58 +24,40 @@
 
 
 // C++ Standard Headers
-#include <string>
 #include <memory>
-#include <map>
+
 // C Standard Headers
 
 
 // Boost Headers
 
 // 3rd Party Headers
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+
 
 // GTK Headers
-
+#include <gtkmm.h>
 
 // Our Headers
-
-
-
-#ifdef __APPLE__
-#define SCROLL_SENSITIVITY 1.0f
-#else 
-#define SCROLL_SENSITIVITY 0.05f
-#endif
+#include "../MainWindow.h"
 
 
 namespace monet
 {
-	
 	namespace ui
 	{
-		
-		class Window;
-
-		class AppDelegate
+		class MainWindowLinux : public MainWindow
 		{
 		public:
-			AppDelegate();
-			virtual ~AppDelegate();
-	
-			void Run(std::shared_ptr<monet::ui::Window> window);
-			std::shared_ptr<monet::ui::Window> GetWindow(GLFWwindow *nativeWindow);
-	
-			static AppDelegate *instance;
-	
+			MainWindowLinux(int argc, char *argv[]);
+			virtual ~MainWindowLinux();
+
+			void Show();
+		
 		private:
-			std::map< GLFWwindow*, std::shared_ptr<monet::ui::Window> > windowMappings;
-	
-	
+			Glib::RefPtr<Gtk::Application> gtkApp;
+			std::unique_ptr<Gtk::Window> gtkWindow;
 		};
 	}
-	
 }
 
-#endif // __APPDELEGATE_H__
+#endif // _MAINWINDOWLINUX_H_

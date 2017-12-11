@@ -1,3 +1,5 @@
+#ifndef _MAINWINDOW_H_
+#define _MAINWINDOW_H_
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -31,15 +33,34 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
 
 
 // Our Headers
-#include <ui/MainWindow.h>
 
-int main(int argc, char **argv) {
-	
-	auto window = monet::ui::MainWindow::Create(argc, argv);
-	window->Show();
+
+
+namespace monet
+{
+	namespace ui
+	{
+		
+		class MainWindow
+		{
+		public:
+
+			virtual ~MainWindow();
+			virtual void Show() = 0;
+
+			static std::unique_ptr<monet::ui::MainWindow> Create(int argc, char *argv[]);
+
+		protected:
+			MainWindow();
+			
+			MainWindow(MainWindow &rhs);
+			
+		};
+	}
 }
+
+#endif // _MAINWINDOW_H_

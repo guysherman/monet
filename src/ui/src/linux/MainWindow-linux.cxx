@@ -19,7 +19,7 @@
 
 	Contact the author via https://github.com/guysherman
 */
-
+#ifdef __linux__
 
 // C++ Standard Headers
 #include <memory>
@@ -33,13 +33,29 @@
 
 
 // GTK Headers
-
+#include <gtkmm.h>
 
 // Our Headers
-#include <ui/MainWindow.h>
 
-int main(int argc, char **argv) {
-	
-	auto window = monet::ui::MainWindow::Create(argc, argv);
-	window->Show();
+#include "../../include/ui/linux/MainWindow-linux.h"
+
+namespace monet
+{
+	namespace ui
+	{
+		MainWindowLinux::MainWindowLinux(int argc, char *argv[]) : MainWindow()
+		{
+			gtkApp = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
+			gtkWindow = std::unique_ptr<Gtk::Window>( new Gtk::Window() );
+			gtkWindow->set_default_size(1280, 800);
+		}
+		MainWindowLinux::~MainWindowLinux() {}
+
+		void MainWindowLinux::Show() 
+		{	
+			gtkApp->run(*(gtkWindow.get()));
+		}
+	}
 }
+
+#endif

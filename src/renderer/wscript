@@ -16,10 +16,9 @@ def configure(conf):
 def build(bld):
 	bld.stlib(
 	source = bld.path.ant_glob('src/*.cxx'),
-	cxxflags=['-fPIC', '-Werror', '-pedantic-errors'],
+	cxxflags=['-fPIC', '-Werror', '-pedantic-errors', '-Wno-c++14-extensions'],
 	target="monet-renderer",
 	includes = ['./include', '/usr/local/include', '/usr/include'],
 	export_includes=['./include', '/usr/local/include', '/usr/include'],
 	install_path='${LIBDIR}',
-	cppcheck_skip=True,
 	features="cxx cxxstlib")

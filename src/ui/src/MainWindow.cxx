@@ -1,5 +1,3 @@
-#ifndef __WINDOW_H__
-#define __WINDOW_H__
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -26,51 +24,47 @@
 // C++ Standard Headers
 #include <memory>
 #include <string>
+#include <iostream>
 // C Standard Headers
 
 
 // Boost Headers
 
 // 3rd Party Headers
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
-#define GLM_PRECISION_MEDIUMP_INT
-#define GLM_PRECISION_HIGHP_FLOAT
-#include <glm/vec2.hpp>
 // GTK Headers
 
 
 // Our Headers
+#include "../include/ui/MainWindow.h"
 
-
+#ifdef __linux
+	#include "../include/ui/linux/MainWindow-linux.h"
+#endif
 
 namespace monet
 {
 	namespace ui
 	{
-		
-		class Window
+		MainWindow::MainWindow()
 		{
-		public:
 
-			Window(std::string windowTitle, glm::vec2 windowSize);
-			virtual ~Window();
+		}
 
-			GLFWwindow *GetNativeWindow();
+		MainWindow::~MainWindow()
+		{
 
-			void MouseButtonEvent(int button, int action, int mods);
-			void MousePositionEvent(double xpos, double ypos);
-			void ScrollEvent(double xoffset, double yoffset);
-			void KeyEvent(int key, int scancode, int action, int mods);
-			
-		private:
-			GLFWwindow *nativeWindow;
-			//AppDelegate *appDelegate;
-			std::string windowTitle;
-			glm::vec2 windowSize;
-		};
+		}
+
+		
+		std::unique_ptr<MainWindow> MainWindow::Create(int argc, char *argv[])
+		{
+#ifdef __linux__
+			return std::unique_ptr<MainWindow>(new MainWindowLinux(argc, argv));
+#else
+			return std::unique_ptr<MainWindow>(nullptr);
+#endif
+		}
+
 	}
 }
-
-#endif // __WINDOW_H__

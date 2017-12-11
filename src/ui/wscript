@@ -9,17 +9,18 @@ def options(opt):
 def configure(conf):
 	conf.load('compiler_cxx')
 	conf.load('cppcheck')
+	conf.check_cfg(package='gtkmm-3.0', uselib_store='GTKMM', args=['--cflags', '--libs'])
 	conf.env.CXXFLAGS = ['-Wall', '-ansi', '-ggdb']
 
 
 
 def build(bld):
 	bld.stlib(
-	source = bld.path.ant_glob('src/*.cxx'),
-	cxxflags=['-fPIC', '-Werror', '-pedantic-errors'],
+	source = bld.path.ant_glob('src/**/*.cxx'),
+	cxxflags=['-fPIC', '-Werror', '-pedantic-errors', '-Wno-c++14-extensions'],
 	target="monet-ui",
+	use=['GTKMM'],
 	includes = ['./include', '/usr/local/include', '/usr/include'],
 	export_includes=['./include', '/usr/local/include', '/usr/include'],
 	install_path='${LIBDIR}',
-	cppcheck_skip=True,
 	features="cxx cxxstlib")

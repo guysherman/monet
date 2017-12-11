@@ -1,8 +1,8 @@
 # Monet
 
-A new open-source platform for creating GPU-based image-processing applications. 
+Was going to be a a new open-source platform for creating GPU-based image-processing applications. I decided I couldn't be bothered re-inventing several different wheels when what I wanted to do was make a photo editing application to rival Lightroom and Photoshop. 
 
-Ultimately I want to build a photo editing application to rival Lightroom and Photoshop. My basic goals for now are:
+So, my basic goals for now are:
 * Cross-platform
 * Non-destructive
 * GPU-based
@@ -25,7 +25,8 @@ Get the deps:
 * cpp-check
 * libpng
 * libtga
-* BOOST
+* BOOST   (I'm planning on getting rid of this one...)
+* GTKMM 3.0
 
 
 Clone the source, then:
