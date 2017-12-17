@@ -140,7 +140,7 @@ namespace monet
 			// already been set to be the size of the allocation
 
 			// we can start by clearing the buffer
-			glClearColor (0, 0, 0, 0);
+			glClearColor (0.4f, 0.6f, 0.95f, 1.0f);
 			glClear (GL_COLOR_BUFFER_BIT);
 
 			
