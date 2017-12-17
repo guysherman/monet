@@ -34,3 +34,6 @@ build/
 reports/
 .waf-*
 .lock-waf*
+
+
+*~

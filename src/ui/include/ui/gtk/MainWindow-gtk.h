@@ -38,24 +38,36 @@
 #include <gtkmm.h>
 
 // Our Headers
-#include "../MainWindow.h"
+
 
 
 namespace monet
 {
 	namespace ui
 	{
-		class MainWindowLinux : public MainWindow
+		class MainWindowGtk : public Gtk::Window
 		{
 		public:
-			MainWindowLinux(int argc, char *argv[]);
-			virtual ~MainWindowLinux();
+			MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app);
+			virtual ~MainWindowGtk();
 
-			void Show();
+			
 		
+		protected:
+			
+
 		private:
-			Glib::RefPtr<Gtk::Application> gtkApp;
-			std::unique_ptr<Gtk::Window> gtkWindow;
+			Glib::RefPtr<Gtk::Builder> gtkBuilder;
+			Gtk::Box clientArea;
+
+			std::shared_ptr<Gtk::AboutDialog> aboutDialog;
+			Gtk::Box *leftBox;
+			Gtk::Box *mainBox;
+			Gtk::Box *rightBox;
+			Glib::RefPtr<Gio::SimpleActionGroup> mainActionGroup;
+
+			void showAbout();
+			
 		};
 	}
 }

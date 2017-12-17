@@ -33,13 +33,16 @@
 
 
 // GTK Headers
-
+#include <gtkmm.h>
 
 // Our Headers
-#include <ui/MainWindow.h>
+#include <ui/gtk/MainWindow-gtk.h>
 
 int main(int argc, char **argv) {
 	
-	auto window = monet::ui::MainWindow::Create(argc, argv);
-	window->Show();
+	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
+
+	monet::ui::MainWindowGtk window(app);
+
+	return app->run(window);
 }

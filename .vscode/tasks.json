@@ -3,16 +3,16 @@
     "tasks": [
         {
             "taskName": "Build",
-            "command": "./waf",
-            "args": [],
+            "command": "/usr/bin/ninja",
+            "args": ["-C", "build"],
             "isShellCommand": true,
             "isBackground": true,
             "isBuildCommand": true
         },
         {
             "taskName": "Configure",
-            "command": "./waf",
-            "args": ["configure"],
+            "command": "/usr/bin/meson",
+            "args": ["configure", "build"],
             "isShellCommand": true
         }
     ]

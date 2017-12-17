@@ -24,6 +24,7 @@
 
 // C++ Standard Headers
 #include <memory>
+#include <iostream>
 
 // C Standard Headers
 
@@ -44,18 +45,92 @@ namespace monet
 {
 	namespace ui
 	{
-		MainWindowLinux::MainWindowLinux(int argc, char *argv[]) : MainWindow()
+		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app)
+		: clientArea(Gtk::ORIENTATION_VERTICAL), leftBox(nullptr), mainBox(nullptr), rightBox(nullptr)
 		{
-			gtkApp = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-			gtkWindow = std::unique_ptr<Gtk::Window>( new Gtk::Window() );
-			gtkWindow->set_default_size(1280, 800);
-		}
-		MainWindowLinux::~MainWindowLinux() {}
+			set_title("Monet Photo");
+			set_default_size(1280, 800);
 
-		void MainWindowLinux::Show() 
-		{	
-			gtkApp->run(*(gtkWindow.get()));
+			gtkBuilder = Gtk::Builder::create();
+
+			add(clientArea);
+			
+			mainActionGroup = Gio::SimpleActionGroup::create();
+			mainActionGroup->add_action("about", sigc::mem_fun(*this, &MainWindowGtk::showAbout));
+			
+			insert_action_group("app", mainActionGroup);
+
+			try
+			{
+				gtkBuilder->add_from_file("assets/Menu.glade");
+				gtkBuilder->add_from_file("assets/About.glade");
+				gtkBuilder->add_from_file("assets/Layout.glade");
+				//m_refBuilder->add_from_resource("./toolbar/toolbar.glade");
+			}
+			catch(const Glib::Error& ex)
+			{
+				std::cerr << "Building menus and toolbar failed: " <<  ex.what();
+			}
+
+			Gtk::MenuBar *menuBar = nullptr;
+			gtkBuilder->get_widget("mainMenu", menuBar);
+			if (!menuBar)
+			{
+				g_warning("menuBar not found");
+			}
+			else
+			{
+				clientArea.pack_start(*menuBar, Gtk::PACK_SHRINK);
+			}
+
+			Gtk::AboutDialog *about = nullptr;
+			gtkBuilder->get_widget("aboutBox", about);
+			if (!about)
+			{
+				g_warning("aboutBox not found");
+			}
+			else
+			{
+				aboutDialog = std::shared_ptr<Gtk::AboutDialog>(about);
+			}
+
+			Gtk::Paned *rootLayout = nullptr;
+			gtkBuilder->get_widget("rootLayout", rootLayout);
+			if (!rootLayout)
+			{
+				g_warning("rootLayout not found");
+			}
+			else
+			{
+				clientArea.pack_start(*rootLayout, Gtk::PACK_EXPAND_WIDGET);
+				gtkBuilder->get_widget("leftBox", leftBox);
+				gtkBuilder->get_widget("rightBox", rightBox);
+				gtkBuilder->get_widget("mainBox", mainBox);
+			}
+
+			if (!mainBox)
+			{
+				g_warning("mainBox not found!");
+			}
+			else
+			{
+				auto glArea = Gtk::manage(new Gtk::GLArea());
+				mainBox->pack_start(*glArea, Gtk::PACK_EXPAND_WIDGET);
+			}
+
+			show_all_children();
 		}
+
+		void MainWindowGtk::showAbout()
+		{
+			aboutDialog->show();
+
+			aboutDialog->present();
+		}
+
+		MainWindowGtk::~MainWindowGtk() {}
+
+		
 	}
 }
 
