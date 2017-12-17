@@ -22,6 +22,8 @@
 #include "../../include/ui/PlatformConfig.h"
 #ifdef UI_PLATFORM_GTK
 
+#include <GL/glew.h>
+
 // C++ Standard Headers
 #include <memory>
 #include <iostream>
@@ -48,6 +50,9 @@ namespace monet
 		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app)
 		: clientArea(Gtk::ORIENTATION_VERTICAL), leftBox(nullptr), mainBox(nullptr), rightBox(nullptr)
 		{
+			glewExperimental = GL_TRUE;
+			glewInit();
+			
 			set_title("Monet Photo");
 			set_default_size(1280, 800);
 
@@ -116,6 +121,7 @@ namespace monet
 			{
 				auto glArea = Gtk::manage(new Gtk::GLArea());
 				mainBox->pack_start(*glArea, Gtk::PACK_EXPAND_WIDGET);
+				glArea->signal_render().connect(sigc::mem_fun(*this, &MainWindowGtk::onRender));
 			}
 
 			show_all_children();
@@ -126,6 +132,24 @@ namespace monet
 			aboutDialog->show();
 
 			aboutDialog->present();
+		}
+
+		bool MainWindowGtk::onRender(const Glib::RefPtr<Gdk::GLContext>& context)
+		{
+			// inside this function it's safe to use GL; the given
+			// #GdkGLContext has been made current to the drawable
+			// surface used by the #GtkGLArea and the viewport has
+			// already been set to be the size of the allocation
+
+			// we can start by clearing the buffer
+			glClearColor (0, 0, 0, 0);
+			glClear (GL_COLOR_BUFFER_BIT);
+
+			
+			// we completed our drawing; the draw commands will be
+			// flushed at the end of the signal emission chain, and
+			// the buffers will be drawn on the window
+			return true;
 		}
 
 		MainWindowGtk::~MainWindowGtk() {}

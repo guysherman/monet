@@ -67,7 +67,8 @@ namespace monet
 			Glib::RefPtr<Gio::SimpleActionGroup> mainActionGroup;
 
 			void showAbout();
-			
+
+			bool onRender(const Glib::RefPtr<Gdk::GLContext>& context);
 		};
 	}
 }
