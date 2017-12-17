@@ -69,6 +69,7 @@ namespace monet
 			void showAbout();
 
 			bool onRender(const Glib::RefPtr<Gdk::GLContext>& context);
+			void onRealize();
 		};
 	}
 }

@@ -50,9 +50,7 @@ namespace monet
 		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app)
 		: clientArea(Gtk::ORIENTATION_VERTICAL), leftBox(nullptr), mainBox(nullptr), rightBox(nullptr)
 		{
-			glewExperimental = GL_TRUE;
-			glewInit();
-			
+
 			set_title("Monet Photo");
 			set_default_size(1280, 800);
 
@@ -150,6 +148,12 @@ namespace monet
 			// flushed at the end of the signal emission chain, and
 			// the buffers will be drawn on the window
 			return true;
+		}
+
+		void MainWindowGtk::onRealize() 
+		{
+			glewExperimental = GL_TRUE;
+			glewInit();
 		}
 
 		MainWindowGtk::~MainWindowGtk() {}
