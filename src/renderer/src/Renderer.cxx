@@ -20,9 +20,11 @@
 	Contact the author via https://github.com/guysherman
 */
 
+// GLEW
+#include <GL/glew.h>
 
 // C++ Standard Headers
-#include <memory>
+
 
 // C Standard Headers
 
@@ -31,21 +33,32 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
-#include <gtkmm.h>
+
 
 // Our Headers
-#include <ui/gtk/MainWindow-gtk.h>
-#include <renderer/Renderer.h>
+#include "../include/renderer/Renderer.h"
 
-int main(int argc, char **argv) {
-	
-	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-	auto renderer = std::shared_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
+namespace monet
+{
+    namespace renderer
+    {
+        Renderer::Renderer() {}
+        Renderer::~Renderer() {}
 
+        void Renderer::Draw() 
+        {
+            // inside this function it's safe to use GL; the given
+			// #GdkGLContext has been made current to the drawable
+			// surface used by the #GtkGLArea and the viewport has
+			// already been set to be the size of the allocation
 
-	monet::ui::MainWindowGtk window(app, std::weak_ptr<monet::renderer::Renderer>(renderer));
+			// we can start by clearing the buffer
+			glClearColor (0.4f, 0.6f, 0.95f, 1.0f);
+			glClear (GL_COLOR_BUFFER_BIT);
 
-	return app->run(window);
+			
+        }
+    }
 }
+

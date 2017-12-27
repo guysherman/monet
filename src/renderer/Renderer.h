@@ -1,3 +1,6 @@
+#ifndef _RENDERER_H_
+#define _RENDERER_H_
+
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -20,9 +23,11 @@
 	Contact the author via https://github.com/guysherman
 */
 
+// GLEW
+#include <GL/glew.h>
 
 // C++ Standard Headers
-#include <memory>
+
 
 // C Standard Headers
 
@@ -31,21 +36,23 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
-#include <gtkmm.h>
+
 
 // Our Headers
-#include <ui/gtk/MainWindow-gtk.h>
-#include <renderer/Renderer.h>
 
-int main(int argc, char **argv) {
-	
-	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-	auto renderer = std::shared_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
+namespace monet
+{
+    namespace renderer
+    {
+        class Renderer
+        {
+            Renderer();
+            virtual ~Renderer();
 
-
-	monet::ui::MainWindowGtk window(app, std::weak_ptr<monet::renderer::Renderer>(renderer));
-
-	return app->run(window);
+            void Draw();
+        };
+    }
 }
+
+#endif //_RENDERER_H_

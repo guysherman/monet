@@ -5,6 +5,7 @@ ui_sources = [
 ui_deps = []
 ui_deps += dependency('gtkmm-3.0')
 ui_deps += dependency('glew')
+ui_deps += renderer_module
 
 ui_link_args = []
 if host_machine.system() == 'darwin'

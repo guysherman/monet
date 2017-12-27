@@ -42,13 +42,18 @@
 // Our Headers
 
 #include "../../include/ui/gtk/MainWindow-gtk.h"
+#include <renderer/Renderer.h>
 
 namespace monet
 {
 	namespace ui
 	{
-		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app)
-		: clientArea(Gtk::ORIENTATION_VERTICAL), leftBox(nullptr), mainBox(nullptr), rightBox(nullptr)
+		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app, std::weak_ptr<monet::renderer::Renderer> renderer)
+		: clientArea(Gtk::ORIENTATION_VERTICAL), 
+			leftBox(nullptr), 
+			mainBox(nullptr), 
+			rightBox(nullptr),
+			renderer(renderer)
 		{
 
 			set_title("Monet Photo");
@@ -134,16 +139,8 @@ namespace monet
 
 		bool MainWindowGtk::onRender(const Glib::RefPtr<Gdk::GLContext>& context)
 		{
-			// inside this function it's safe to use GL; the given
-			// #GdkGLContext has been made current to the drawable
-			// surface used by the #GtkGLArea and the viewport has
-			// already been set to be the size of the allocation
-
-			// we can start by clearing the buffer
-			glClearColor (0.4f, 0.6f, 0.95f, 1.0f);
-			glClear (GL_COLOR_BUFFER_BIT);
-
-			
+			auto r = renderer.lock();
+			r->Draw();
 			// we completed our drawing; the draw commands will be
 			// flushed at the end of the signal emission chain, and
 			// the buffers will be drawn on the window

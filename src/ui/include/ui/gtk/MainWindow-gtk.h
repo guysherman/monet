@@ -38,17 +38,17 @@
 #include <gtkmm.h>
 
 // Our Headers
-
-
+#include "renderer/ForwardDeclarations.h"
 
 namespace monet
 {
+	
 	namespace ui
 	{
 		class MainWindowGtk : public Gtk::Window
 		{
 		public:
-			MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app);
+			MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app, std::weak_ptr<monet::renderer::Renderer> renderer);
 			virtual ~MainWindowGtk();
 
 			
@@ -65,6 +65,8 @@ namespace monet
 			Gtk::Box *mainBox;
 			Gtk::Box *rightBox;
 			Glib::RefPtr<Gio::SimpleActionGroup> mainActionGroup;
+
+			std::weak_ptr<monet::renderer::Renderer> renderer;
 
 			void showAbout();
 
