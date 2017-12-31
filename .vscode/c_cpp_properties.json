@@ -98,14 +98,16 @@
                 "/usr/lib/sigc++-2.0/include",
                 "/usr/include/gdk-pixbuf-2.0",
                 "/usr/include/glib-2.0",
-                "/usr/lib/glib-2.0/include"
-                
+                "/usr/lib/glib-2.0/include",
+                "${workspaceRoot}/src/util/include"
             ],
             "defines": [],
             "browse": {
                 "path": [
                     "/usr/include",
                     "/usr/local/include",
+                    "/usr/lib",
+                    "/usr/local/lib",
                     "${workspaceRoot}",
                     "${workspaceRoot}/src"
                 ],

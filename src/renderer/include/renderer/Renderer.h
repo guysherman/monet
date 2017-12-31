@@ -35,6 +35,7 @@
 // Boost Headers
 
 // 3rd Party Headers
+#include <glm/glm.hpp>
 
 // GTK Headers
 
@@ -52,6 +53,11 @@ namespace monet
             virtual ~Renderer();
 
             void Draw();
+			void ResizeView(float width, float height);
+			void SetImageAspectRatio(float aspect);
+		private:
+			glm::vec2 viewSize;
+			float imageAspectRatio;
         };
     }
 }

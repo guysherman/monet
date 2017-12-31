@@ -48,7 +48,7 @@ namespace monet
 		class MainWindowGtk : public Gtk::Window
 		{
 		public:
-			MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app, std::weak_ptr<monet::renderer::Renderer> renderer);
+			MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app);
 			virtual ~MainWindowGtk();
 
 			
@@ -66,12 +66,14 @@ namespace monet
 			Gtk::Box *rightBox;
 			Glib::RefPtr<Gio::SimpleActionGroup> mainActionGroup;
 
-			std::weak_ptr<monet::renderer::Renderer> renderer;
+			std::unique_ptr<monet::renderer::Renderer> renderer;
+			Gtk::GLArea *glArea;
 
 			void showAbout();
 
 			bool onRender(const Glib::RefPtr<Gdk::GLContext>& context);
 			void onRealize();
+			void onResize(int width, int height);
 		};
 	}
 }

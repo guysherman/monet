@@ -1,3 +1,6 @@
+#ifndef _RENDER_PASS_H_
+#define _RENDER_PASS_H_
+
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -20,9 +23,11 @@
 	Contact the author via https://github.com/guysherman
 */
 
+// GLEW
+#include <GL/glew.h>
 
 // C++ Standard Headers
-#include <memory>
+
 
 // C Standard Headers
 
@@ -31,18 +36,29 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
-#include <gtkmm.h>
+
 
 // Our Headers
-#include <ui/gtk/MainWindow-gtk.h>
-#include <renderer/Renderer.h>
 
-int main(int argc, char **argv) {
-	
-	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-	monet::ui::MainWindowGtk window(app);
+namespace monet
+{
+    namespace renderer
+	{
+		class RenderPass
+		{
+		public:
+			RenderPass();
+			virtual ~RenderPass();
 
-	return app->run(window);
+			GLuint GetProgramId();
+		private:
+			GLuint programId;
+			GLuint vertexShaderId;
+			GLuint fragmentShaderId;
+			
+		};
+	}
 }
+
+#endif //_RENDER_PASS_H_

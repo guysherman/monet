@@ -20,10 +20,13 @@
 	Contact the author via https://github.com/guysherman
 */
 
+// GLEW
+
 
 // C++ Standard Headers
 #include <memory>
-
+#include <string>
+#include <fstream>
 // C Standard Headers
 
 
@@ -31,18 +34,53 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
-#include <gtkmm.h>
+
 
 // Our Headers
-#include <ui/gtk/MainWindow-gtk.h>
-#include <renderer/Renderer.h>
+#include "../include/util/File.h"
 
-int main(int argc, char **argv) {
-	
-	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-	monet::ui::MainWindowGtk window(app);
+namespace monet
+{
+	namespace util
+	{
+		File::File() {}
+		File::~File() {}
 
-	return app->run(window);
+		File* File::instance = nullptr;
+
+		File* File::GetInstance()
+		{
+			if (nullptr == instance)
+			{
+				instance = new File();
+			}
+			return instance;
+		}
+
+		std::string File::GetDataAsString(std::string filePath)
+		{
+			std::string result = "";
+			std::ifstream is (filePath, std::ifstream::binary);
+			if (is) 
+			{
+				// get length of file:
+				is.seekg (0, is.end);
+				int length = is.tellg();
+				is.seekg (0, is.beg);
+
+				result.reserve(length);
+				result.resize(length, '\0');
+
+				// read data as a block:
+				is.read (&result[0],length);
+
+				is.close();
+			}
+
+			return result;
+
+		}
+	}
 }
+

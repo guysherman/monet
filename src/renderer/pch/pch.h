@@ -1,5 +1,5 @@
-#ifndef _RENDERER_H_
-#define _RENDERER_H_
+#ifndef _RENDERER_PCH_H_
+#define _RENDERER_PCH_H_
 
 /*
 	Monet is an open-source platform for building GPU-accelerated image
@@ -27,7 +27,9 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <memory>
+#include <string>
+#include <fstream>
 
 // C Standard Headers
 
@@ -35,7 +37,9 @@
 // Boost Headers
 
 // 3rd Party Headers
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 // GTK Headers
 
 
@@ -43,16 +47,7 @@
 
 namespace monet
 {
-    namespace renderer
-    {
-        class Renderer
-        {
-            Renderer();
-            virtual ~Renderer();
-
-            void Draw();
-        };
-    }
+    
 }
 
-#endif //_RENDERER_H_
+#endif //_RENDERER_PCH_H_

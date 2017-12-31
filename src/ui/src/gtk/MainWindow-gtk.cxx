@@ -48,12 +48,11 @@ namespace monet
 {
 	namespace ui
 	{
-		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app, std::weak_ptr<monet::renderer::Renderer> renderer)
+		MainWindowGtk::MainWindowGtk(const Glib::RefPtr<Gtk::Application>& app)
 		: clientArea(Gtk::ORIENTATION_VERTICAL), 
 			leftBox(nullptr), 
 			mainBox(nullptr), 
-			rightBox(nullptr),
-			renderer(renderer)
+			rightBox(nullptr)
 		{
 
 			set_title("Monet Photo");
@@ -122,9 +121,11 @@ namespace monet
 			}
 			else
 			{
-				auto glArea = Gtk::manage(new Gtk::GLArea());
+				glArea = Gtk::manage(new Gtk::GLArea());
 				mainBox->pack_start(*glArea, Gtk::PACK_EXPAND_WIDGET);
 				glArea->signal_render().connect(sigc::mem_fun(*this, &MainWindowGtk::onRender));
+				glArea->signal_realize().connect(sigc::mem_fun(*this, &MainWindowGtk::onRealize));
+				glArea->signal_resize().connect(sigc::mem_fun(*this, &MainWindowGtk::onResize));
 			}
 
 			show_all_children();
@@ -139,8 +140,7 @@ namespace monet
 
 		bool MainWindowGtk::onRender(const Glib::RefPtr<Gdk::GLContext>& context)
 		{
-			auto r = renderer.lock();
-			r->Draw();
+			renderer->Draw();
 			// we completed our drawing; the draw commands will be
 			// flushed at the end of the signal emission chain, and
 			// the buffers will be drawn on the window
@@ -149,8 +149,13 @@ namespace monet
 
 		void MainWindowGtk::onRealize() 
 		{
-			glewExperimental = GL_TRUE;
-			glewInit();
+			glArea->make_current();
+			renderer = std::unique_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
+		}
+
+		void MainWindowGtk::onResize(int width, int height)
+		{
+			renderer->ResizeView(width, height);
 		}
 
 		MainWindowGtk::~MainWindowGtk() {}

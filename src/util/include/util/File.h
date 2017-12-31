@@ -1,3 +1,6 @@
+#ifndef _UTIL_FILE_H_
+#define _UTIL_FILE_H_
+
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -20,10 +23,12 @@
 	Contact the author via https://github.com/guysherman
 */
 
+// GLEW
+
 
 // C++ Standard Headers
 #include <memory>
-
+#include <string>
 // C Standard Headers
 
 
@@ -31,18 +36,28 @@
 
 // 3rd Party Headers
 
-
 // GTK Headers
-#include <gtkmm.h>
+
 
 // Our Headers
-#include <ui/gtk/MainWindow-gtk.h>
-#include <renderer/Renderer.h>
 
-int main(int argc, char **argv) {
-	
-	auto app = Gtk::Application::create(argc, argv, "photo.guysherman.monet-photo");
-	monet::ui::MainWindowGtk window(app);
+namespace monet
+{
+    namespace util
+	{
+		class File
+		{
+		public:
+			File();
+			virtual ~File();
 
-	return app->run(window);
+			static File* GetInstance();
+
+			std::string GetDataAsString(std::string filePath);
+		private:
+			static File* instance;
+		};
+	}
 }
+
+#endif //_UTIL_FILE_H_
