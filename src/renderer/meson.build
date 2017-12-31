@@ -2,7 +2,8 @@ renderer_includes = include_directories('include')
 renderer_sources = [
 	'src/Renderer.cxx',
 	'src/Geometry.cxx',
-	'src/RenderPass.cxx'
+	'src/RenderPass.cxx',
+	'src/Texture.cxx'
 ]
 renderer_deps = []
 renderer_deps += dependency('glew')

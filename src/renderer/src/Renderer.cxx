@@ -43,6 +43,7 @@
 #include "../include/renderer/Renderer.h"
 #include "../include/renderer/Geometry.h"
 #include "../include/renderer/RenderPass.h"
+#include "../include/renderer/Texture.h"
 
 void openglCallbackFunction(GLenum source,
 							GLenum type,
@@ -140,6 +141,8 @@ namespace monet
 
 			static Geometry *quad = nullptr;
 			static RenderPass *pass = nullptr;
+			static Texture *texture = nullptr;
+
 			static float clear_r = 0.0f;
 			if (nullptr == quad)
 			{
@@ -149,6 +152,11 @@ namespace monet
 			if (nullptr == pass)
 			{
 				pass = new RenderPass();
+			}
+
+			if (nullptr == texture)
+			{
+				texture = new Texture();
 			}
 
 			int matrix_location = glGetUniformLocation (pass->GetProgramId(), "matrix");
@@ -162,6 +170,17 @@ namespace monet
 			glUseProgram(pass->GetProgramId());
 			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
 			glBindVertexArray(quad->GetVaoId());
+
+			glActiveTexture( texture->GetTextureUnit() );
+			glBindTexture( GL_TEXTURE_2D, texture->GetTextureId() );
+
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+			
+			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0 );
+
 			glDrawElements(GL_TRIANGLES, quad->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
 
 			clear_r += 0.1f;

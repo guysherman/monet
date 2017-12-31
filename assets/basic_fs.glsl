@@ -4,6 +4,6 @@ uniform sampler2D basic_texture;
 
 out vec4 frag_colour;
 void main () {
-	//vec4 texel = texture(basic_texture, texture_coordinates);
-	frag_colour = vec4(1.0, 1.0, 1.0, 1.0);
+	vec4 texel = texture(basic_texture, texture_coordinates);
+	frag_colour = texel * vec4(1.0, 1.0, 1.0, 1.0);
 }
