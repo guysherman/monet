@@ -153,6 +153,28 @@ namespace monet
 
 			int matrix_location = glGetUniformLocation (pass->GetProgramId(), "matrix");
 
+			auto mvp = getMvp();
+
+			// we can start by clearing the buffer
+			glClearColor(0x30 / 255.0f, 0x30 / 255.0f, 0x30 / 255.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+			glUseProgram(pass->GetProgramId());
+			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
+			glBindVertexArray(quad->GetVaoId());
+			glDrawElements(GL_TRIANGLES, quad->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
+
+			clear_r += 0.1f;
+			if (clear_r >= 1.0f)
+			{
+				clear_r = 0.0f;
+			}
+
+			glFlush();
+        }
+
+		glm::mat4 Renderer::getMvp()
+		{
 			auto model = glm::mat4(1.0f);
 			auto view = glm::lookAt(glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			
@@ -180,24 +202,8 @@ namespace monet
 			
 			
 			auto mvp = projection * view * model;
-
-			// we can start by clearing the buffer
-			glClearColor(clear_r, 0.6f, 0.95f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-			glUseProgram(pass->GetProgramId());
-			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
-			glBindVertexArray(quad->GetVaoId());
-			glDrawElements(GL_TRIANGLES, quad->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
-
-			clear_r += 0.1f;
-			if (clear_r >= 1.0f)
-			{
-				clear_r = 0.0f;
-			}
-
-			glFlush();
-        }
+			return mvp;
+		}
 
 		void Renderer::ResizeView(float width, float height)
 		{

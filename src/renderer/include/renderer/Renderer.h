@@ -58,6 +58,8 @@ namespace monet
 		private:
 			glm::vec2 viewSize;
 			float imageAspectRatio;
+
+			glm::mat4 getMvp();
         };
     }
 }
