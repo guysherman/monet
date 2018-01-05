@@ -1,5 +1,5 @@
-#ifndef _TEXTURE_H_
-#define _TEXTURE_H_
+#ifndef _SIMPLERENDERPASS_H_
+#define _SIMPLERENDERPASS_H_
 
 /*
 	Monet is an open-source platform for building GPU-accelerated image
@@ -27,7 +27,7 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <memory>
 
 // C Standard Headers
 
@@ -35,39 +35,37 @@
 // Boost Headers
 
 // 3rd Party Headers
-#include <glm/glm.hpp>
 
 // GTK Headers
 
 
 // Our Headers
+#include "IRenderPass.h"
 
 namespace monet
 {
     namespace renderer
 	{
-		class Texture
+		class Texture;
+		class Geometry;
+		class ShaderProgram;
+		class Renderer;
+		
+		class SimpleRenderPass : public IRenderPass
 		{
 		public:
-			Texture();
-			virtual ~Texture();
+			SimpleRenderPass();
+			virtual ~SimpleRenderPass();
 
-			GLuint GetTextureId();
-			GLuint GetTextureUnit();
-			GLenum GetWrapS();
-			GLenum GetWrapT();
-			GLenum GetMinFilter();
-			GLenum GetMagFilter();
-			GLenum GetMaxAniso();
-
-			glm::vec2 GetSize();
-		
+			virtual void Execute(Renderer *renderer);
 		private:
-			GLuint textureId;
 
-			glm::vec2 size;
+			std::shared_ptr<Texture> texture;
+			std::shared_ptr<Geometry> geometry;
+			std::shared_ptr<ShaderProgram> program;
+
 		};
 	}
 }
 
-#endif //_TEXTURE_H_
+#endif //_SIMPLERENDERPASS_H_

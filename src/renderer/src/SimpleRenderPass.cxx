@@ -21,12 +21,11 @@
 */
 
 #include "../pch/pch.h"
-
 // GLEW
 #include <GL/glew.h>
 
 // C++ Standard Headers
-#include <cstdint>
+
 
 // C Standard Headers
 
@@ -34,76 +33,39 @@
 // Boost Headers
 
 // 3rd Party Headers
+#include <glm/glm.hpp>
+
 
 // GTK Headers
 
 
 // Our Headers
+#include "../include/renderer/SimpleRenderPass.h"
+#include "../include/renderer/Geometry.h"
 #include "../include/renderer/Texture.h"
+#include "../include/renderer/ShaderProgram.h"
+#include "../include/renderer/Renderer.h"
 
 namespace monet
 {
     namespace renderer
 	{
-		Texture::Texture()
-		: textureId(0)
+		SimpleRenderPass::SimpleRenderPass()
 		{
-			uint8_t data[32] = {
-				0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00,
-				0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
-			};
-
-			size = glm::vec2(4.0f, 2.0f);
-
-			glGenTextures(1, &this->textureId);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, this->textureId);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 2, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, data);
+			geometry = std::shared_ptr<Geometry>(new Geometry());
+			texture = std::shared_ptr<Texture>(new Texture());
+			program = std::shared_ptr<ShaderProgram>(new ShaderProgram());
 		}
 
-		Texture::~Texture()
-		{
-			glDeleteTextures(1, &this->textureId);
-		}
+		SimpleRenderPass::~SimpleRenderPass() {}
 
-		GLuint Texture::GetTextureId()
+		void SimpleRenderPass::Execute(Renderer *renderer)
 		{
-			return textureId;
-		}
-
-		GLuint Texture::GetTextureUnit()
-		{
-			return GL_TEXTURE0;
-		}
-
-		GLenum Texture::GetWrapS()  
-		{
-			return GL_CLAMP_TO_EDGE;
-		}
-
-		GLenum Texture::GetWrapT()  
-		{
-			return GL_CLAMP_TO_EDGE;
-		}
-
-		GLenum Texture::GetMinFilter() 
-		{
-			return GL_NEAREST;
-		}
-
-		GLenum Texture::GetMagFilter() 
-		{
-			return GL_NEAREST;
-		}
-
-		GLenum Texture::GetMaxAniso()  
-		{
-			return 1.0f;
-		}
-
-		glm::vec2 Texture::GetSize()
-		{
-			return size;
+			auto size = texture->GetSize();
+			renderer->BindShaderProgram(program->GetProgramId());
+			renderer->SetMvpMatrix("matrix", program->GetProgramId(), size.x / size.y);
+			renderer->BindTexture(std::weak_ptr<Texture>(texture));
+			renderer->RenderGeometry(std::weak_ptr<Geometry>(geometry));
 		}
 	}
 }

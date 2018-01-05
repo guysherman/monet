@@ -47,6 +47,8 @@
 #include "../include/renderer/Geometry.h"
 #include "../include/renderer/ShaderProgram.h"
 #include "../include/renderer/Texture.h"
+#include "../include/renderer/IRenderPass.h"
+#include "../include/renderer/SimpleRenderPass.h"
 
 void openglCallbackFunction(GLenum source,
 							GLenum type,
@@ -142,23 +144,10 @@ namespace monet
 			// surface used by the #GtkGLArea and the viewport has
 			// already been set to be the size of the allocation
 
-			static std::shared_ptr<Geometry> quad = nullptr;
-			static std::shared_ptr<ShaderProgram> pass = nullptr;
-			static std::shared_ptr<Texture> texture = nullptr;
-
-			if (nullptr == quad)
+			static std::shared_ptr<IRenderPass> pass = nullptr;
+			if (pass == nullptr)
 			{
-				quad = std::shared_ptr<Geometry>(new Geometry());
-			}
-
-			if (nullptr == pass)
-			{
-				pass = std::shared_ptr<ShaderProgram>(new ShaderProgram());
-			}
-
-			if (nullptr == texture)
-			{
-				texture = std::shared_ptr<Texture>(new Texture());
+				pass = std::shared_ptr<IRenderPass>(new SimpleRenderPass());
 			}
 
 			
@@ -167,11 +156,8 @@ namespace monet
 			glClearColor(0x30 / 255.0f, 0x30 / 255.0f, 0x30 / 255.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-			BindShaderProgram(pass->GetProgramId());
-			SetMvpMatrix(std::string("matrix"), pass->GetProgramId(), imageAspectRatio);
-			BindTexture(std::weak_ptr<Texture>(texture));
-			
-			RenderGeometry(std::weak_ptr<Geometry>(quad));
+			pass->Execute(this);
+
 			glFlush();
         }
 
