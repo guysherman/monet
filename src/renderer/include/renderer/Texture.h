@@ -53,6 +53,11 @@ namespace monet
 
 			GLuint GetTextureId();
 			GLuint GetTextureUnit();
+			GLenum GetWrapS();
+			GLenum GetWrapT();
+			GLenum GetMinFilter();
+			GLenum GetMagFilter();
+			GLenum GetMaxAniso();
 		
 		private:
 			GLuint textureId;

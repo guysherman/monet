@@ -20,8 +20,10 @@
 	Contact the author via https://github.com/guysherman
 */
 
-// GLEW
+#include "../pch/pch.h"
 
+// GLEW
+#include <GL/glew.h>
 
 // C++ Standard Headers
 #include <cstdint>
@@ -46,15 +48,15 @@ namespace monet
 		Texture::Texture()
 		: textureId(0)
 		{
-			uint8_t data[16] = {
-				0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00,
-				0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
+			uint8_t data[32] = {
+				0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00,
+				0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
 			};
 
 			glGenTextures(1, &this->textureId);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, this->textureId);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 2, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, data);
 		}
 
 		Texture::~Texture()
@@ -70,6 +72,31 @@ namespace monet
 		GLuint Texture::GetTextureUnit()
 		{
 			return GL_TEXTURE0;
+		}
+
+		GLenum Texture::GetWrapS()  
+		{
+			return GL_CLAMP_TO_EDGE;
+		}
+
+		GLenum Texture::GetWrapT()  
+		{
+			return GL_CLAMP_TO_EDGE;
+		}
+
+		GLenum Texture::GetMinFilter() 
+		{
+			return GL_NEAREST;
+		}
+
+		GLenum Texture::GetMagFilter() 
+		{
+			return GL_NEAREST;
+		}
+
+		GLenum Texture::GetMaxAniso()  
+		{
+			return 1.0f;
 		}
 	}
 }

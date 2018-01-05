@@ -30,6 +30,8 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <iostream>
+#include <cstdint>
 
 // C Standard Headers
 

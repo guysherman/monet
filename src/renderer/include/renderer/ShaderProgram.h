@@ -1,5 +1,5 @@
-#ifndef _RENDER_PASS_H_
-#define _RENDER_PASS_H_
+#ifndef _SHADERPROGRAM_H_
+#define _SHADERPROGRAM_H_
 
 /*
 	Monet is an open-source platform for building GPU-accelerated image
@@ -45,11 +45,11 @@ namespace monet
 {
     namespace renderer
 	{
-		class RenderPass
+		class ShaderProgram
 		{
 		public:
-			RenderPass();
-			virtual ~RenderPass();
+			ShaderProgram();
+			virtual ~ShaderProgram();
 
 			GLuint GetProgramId();
 		private:
@@ -61,4 +61,4 @@ namespace monet
 	}
 }
 
-#endif //_RENDER_PASS_H_
+#endif //_SHADERPROGRAM_H_

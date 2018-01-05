@@ -19,6 +19,7 @@
 
 	Contact the author via https://github.com/guysherman
 */
+#include "../pch/pch.h"
 
 // GLEW
 #include <GL/glew.h>
@@ -38,14 +39,14 @@
 
 
 // Our Headers
-#include "../include/renderer/RenderPass.h"
+#include "../include/renderer/ShaderProgram.h"
 #include <util/File.h>
 
 namespace monet
 {
     namespace renderer
 	{
-		RenderPass::RenderPass()
+		ShaderProgram::ShaderProgram()
 		{
 			this->vertexShaderId = 0;
 			this->fragmentShaderId = 0;
@@ -70,14 +71,14 @@ namespace monet
 			glLinkProgram(this->programId);
 		}
 
-		RenderPass::~RenderPass()
+		ShaderProgram::~ShaderProgram()
 		{
 			glDeleteShader(this->fragmentShaderId);
 			glDeleteShader(this->vertexShaderId);
 			glDeleteProgram(this->programId);
 		}
 
-		GLuint RenderPass::GetProgramId()
+		GLuint ShaderProgram::GetProgramId()
 		{
 			return this->programId;
 		}

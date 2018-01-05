@@ -2,7 +2,7 @@ renderer_includes = include_directories('include')
 renderer_sources = [
 	'src/Renderer.cxx',
 	'src/Geometry.cxx',
-	'src/RenderPass.cxx',
+	'src/ShaderProgram.cxx',
 	'src/Texture.cxx'
 ]
 renderer_deps = []

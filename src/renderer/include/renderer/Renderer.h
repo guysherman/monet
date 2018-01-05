@@ -27,7 +27,8 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <string>
+#include <memory>
 
 // C Standard Headers
 
@@ -46,7 +47,10 @@ namespace monet
 {
     namespace renderer
     {
-        class Renderer
+        class Texture;
+		class Geometry;
+		
+		class Renderer
         {
         public:
 			Renderer();
@@ -55,6 +59,12 @@ namespace monet
             void Draw();
 			void ResizeView(float width, float height);
 			void SetImageAspectRatio(float aspect);
+
+			void BindShaderProgram(GLuint programId);
+			void SetMvpMatrix(std::string uniformName, GLuint programId, float imageViewAspectRatio);
+			void BindTexture(std::weak_ptr<Texture> texture);
+			void RenderGeometry(std::weak_ptr<Geometry> geometry);
+
 		private:
 			glm::vec2 viewSize;
 			float imageAspectRatio;

@@ -19,6 +19,7 @@
 
 	Contact the author via https://github.com/guysherman
 */
+#include "../pch/pch.h"
 
 // GLEW
 #include  <GL/glew.h>
@@ -51,11 +52,11 @@ namespace monet
 									1.0f,   0.0f };
 
 			GLfloat tcs[8] 		= { 0.0f, 0.0f,
-									1.0f, 0.0f,
+									0.0f, 1.0f,
 									1.0f, 1.0f,
 									1.0f, 0.0f };
 
-			GLuint indices[6]		= { 0, 2, 1, 0, 3, 2 };
+			GLuint indices[6]		= { 0, 1, 2, 0, 2, 3 };
 
 			numElements = 6;
 

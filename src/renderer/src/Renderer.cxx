@@ -20,11 +20,14 @@
 	Contact the author via https://github.com/guysherman
 */
 
+#include "../pch/pch.h"
+
 // GLEW
 #include <GL/glew.h>
 
 // C++ Standard Headers
 #include <iostream>
+#include <memory>
 
 // C Standard Headers
 
@@ -42,7 +45,7 @@
 // Our Headers
 #include "../include/renderer/Renderer.h"
 #include "../include/renderer/Geometry.h"
-#include "../include/renderer/RenderPass.h"
+#include "../include/renderer/ShaderProgram.h"
 #include "../include/renderer/Texture.h"
 
 void openglCallbackFunction(GLenum source,
@@ -101,7 +104,7 @@ namespace monet
 {
     namespace renderer
     {
-        Renderer::Renderer() : viewSize(glm::vec2(0.0f)), imageAspectRatio(1.0f)
+        Renderer::Renderer() : viewSize(glm::vec2(0.0f)), imageAspectRatio(2.0f)
 		{
 			glewExperimental = GL_TRUE;
 			glewInit();
@@ -139,67 +142,53 @@ namespace monet
 			// surface used by the #GtkGLArea and the viewport has
 			// already been set to be the size of the allocation
 
-			static Geometry *quad = nullptr;
-			static RenderPass *pass = nullptr;
-			static Texture *texture = nullptr;
+			static std::shared_ptr<Geometry> quad = nullptr;
+			static std::shared_ptr<ShaderProgram> pass = nullptr;
+			static std::shared_ptr<Texture> texture = nullptr;
 
-			static float clear_r = 0.0f;
 			if (nullptr == quad)
 			{
-				quad = new Geometry();
+				quad = std::shared_ptr<Geometry>(new Geometry());
 			}
 
 			if (nullptr == pass)
 			{
-				pass = new RenderPass();
+				pass = std::shared_ptr<ShaderProgram>(new ShaderProgram());
 			}
 
 			if (nullptr == texture)
 			{
-				texture = new Texture();
+				texture = std::shared_ptr<Texture>(new Texture());
 			}
 
-			int matrix_location = glGetUniformLocation (pass->GetProgramId(), "matrix");
-
-			auto mvp = getMvp();
+			
 
 			// we can start by clearing the buffer
 			glClearColor(0x30 / 255.0f, 0x30 / 255.0f, 0x30 / 255.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-			glUseProgram(pass->GetProgramId());
-			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
-			glBindVertexArray(quad->GetVaoId());
-
-			glActiveTexture( texture->GetTextureUnit() );
-			glBindTexture( GL_TEXTURE_2D, texture->GetTextureId() );
-
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+			BindShaderProgram(pass->GetProgramId());
+			SetMvpMatrix(std::string("matrix"), pass->GetProgramId(), imageAspectRatio);
+			BindTexture(std::weak_ptr<Texture>(texture));
 			
-			glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0 );
-
-			glDrawElements(GL_TRIANGLES, quad->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
-
-			clear_r += 0.1f;
-			if (clear_r >= 1.0f)
-			{
-				clear_r = 0.0f;
-			}
-
+			RenderGeometry(std::weak_ptr<Geometry>(quad));
 			glFlush();
         }
 
-		glm::mat4 Renderer::getMvp()
+		void Renderer::BindShaderProgram(GLuint programId)
+		{
+			// -- BIND SHADER
+			glUseProgram(programId);
+		}
+		
+		void Renderer::SetMvpMatrix(std::string uniformName, GLuint programId, float imageViewAspectRatio)
 		{
 			auto model = glm::mat4(1.0f);
 			auto view = glm::lookAt(glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 			
 			float l, r, t, b;
 			//float imageAspectRatio = 2.0f;
-			float aspectRatio = (viewSize.x / viewSize.y) / imageAspectRatio;
+			float aspectRatio = (viewSize.x / viewSize.y) / imageViewAspectRatio;
 
 			if (aspectRatio < 1.0f) // Tall
 			{
@@ -221,7 +210,37 @@ namespace monet
 			
 			
 			auto mvp = projection * view * model;
-			return mvp;
+			
+			// -- SET MVP MATRIX
+			int matrix_location = glGetUniformLocation (programId, uniformName.c_str());
+			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
+		}
+
+		void Renderer::BindTexture(std::weak_ptr<Texture> texture)
+		{
+			auto tex = texture.lock();
+			if (tex != nullptr)
+			{
+				// -- BIND TEXTURE
+				glActiveTexture( tex->GetTextureUnit() );
+				glBindTexture( GL_TEXTURE_2D, tex->GetTextureId() );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tex->GetWrapS() );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tex->GetWrapT() );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tex->GetMagFilter() );
+				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tex->GetMinFilter() );
+				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex->GetMaxAniso() );
+			}
+		}
+
+		void Renderer::RenderGeometry(std::weak_ptr<Geometry> geometry)
+		{
+			auto geo = geometry.lock();
+			if (geo != nullptr)
+			{
+				// DRAW GEOMETRY
+				glBindVertexArray(geo->GetVaoId());
+				glDrawElements(GL_TRIANGLES, geo->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
+			}
 		}
 
 		void Renderer::ResizeView(float width, float height)
