@@ -29,6 +29,7 @@
 // C++ Standard Headers
 #include <string>
 #include <memory>
+#include <vector>
 
 // C Standard Headers
 
@@ -49,6 +50,7 @@ namespace monet
     {
         class Texture;
 		class Geometry;
+		class IRenderPass;
 		
 		class Renderer
         {
@@ -65,11 +67,15 @@ namespace monet
 			void BindTexture(std::weak_ptr<Texture> texture);
 			void RenderGeometry(std::weak_ptr<Geometry> geometry);
 
+			void AddRenderPass(std::shared_ptr<IRenderPass> pass);
+			void ClearProcessingPipeline();
+
 		private:
 			glm::vec2 viewSize;
 			float imageAspectRatio;
 
 			glm::mat4 getMvp();
+			std::vector< std::shared_ptr<IRenderPass> > processingPipeline;
         };
     }
 }

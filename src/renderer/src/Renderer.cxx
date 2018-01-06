@@ -144,11 +144,7 @@ namespace monet
 			// surface used by the #GtkGLArea and the viewport has
 			// already been set to be the size of the allocation
 
-			static std::shared_ptr<IRenderPass> pass = nullptr;
-			if (pass == nullptr)
-			{
-				pass = std::shared_ptr<IRenderPass>(new SimpleRenderPass());
-			}
+			
 
 			
 
@@ -156,7 +152,11 @@ namespace monet
 			glClearColor(0x30 / 255.0f, 0x30 / 255.0f, 0x30 / 255.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-			pass->Execute(this);
+			for (auto it = processingPipeline.begin(); it != processingPipeline.end(); ++it)
+			{
+				auto pass = *it;
+				pass->Execute(this);
+			}
 
 			glFlush();
         }
@@ -237,6 +237,16 @@ namespace monet
 		void Renderer::SetImageAspectRatio(float aspect)
 		{
 			imageAspectRatio = aspect;
+		}
+
+		void Renderer::AddRenderPass(std::shared_ptr<IRenderPass> pass)
+		{
+			processingPipeline.push_back(pass);
+		}
+
+		void Renderer::ClearProcessingPipeline()
+		{
+			processingPipeline.clear();
 		}
 
     }

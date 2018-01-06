@@ -43,6 +43,9 @@
 
 #include "../../include/ui/gtk/MainWindow-gtk.h"
 #include <renderer/Renderer.h>
+#include <renderer/IRenderPass.h>
+#include <renderer/SimpleRenderPass.h>
+
 
 namespace monet
 {
@@ -134,7 +137,6 @@ namespace monet
 		void MainWindowGtk::showAbout()
 		{
 			aboutDialog->show();
-
 			aboutDialog->present();
 		}
 
@@ -151,6 +153,9 @@ namespace monet
 		{
 			glArea->make_current();
 			renderer = std::unique_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
+			auto pass = std::shared_ptr<monet::renderer::IRenderPass>(new monet::renderer::SimpleRenderPass());
+			renderer->AddRenderPass(pass);
+			
 		}
 
 		void MainWindowGtk::onResize(int width, int height)
