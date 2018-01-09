@@ -70,10 +70,13 @@ namespace monet
 			Gtk::GLArea *glArea;
 
 			void showAbout();
+			
 
 			bool onRender(const Glib::RefPtr<Gdk::GLContext>& context);
 			void onRealize();
 			void onResize(int width, int height);
+
+
 		};
 	}
 }

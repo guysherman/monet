@@ -47,6 +47,7 @@
 #include "../include/renderer/Geometry.h"
 #include "../include/renderer/ShaderProgram.h"
 #include "../include/renderer/Texture.h"
+#include "../include/renderer/RenderPasses.h"
 #include "../include/renderer/IRenderPass.h"
 #include "../include/renderer/SimpleRenderPass.h"
 
@@ -239,14 +240,30 @@ namespace monet
 			imageAspectRatio = aspect;
 		}
 
-		void Renderer::AddRenderPass(std::shared_ptr<IRenderPass> pass)
+		void Renderer::AddRenderPass(RenderPass pass)
 		{
-			processingPipeline.push_back(pass);
+			//processingPipeline.push_back(pass);
+			switch (pass) 
+			{
+				case RenderPass::SIMPLE_RENDER_PASS:
+					processingPipeline.push_back(std::shared_ptr<IRenderPass>(new SimpleRenderPass()));
+			}
 		}
 
 		void Renderer::ClearProcessingPipeline()
 		{
 			processingPipeline.clear();
+		}
+
+		std::vector< std::weak_ptr<IRenderPass> > Renderer::GetProcessingPipeline()
+		{
+			std::vector< std::weak_ptr<IRenderPass> > result;
+			for (auto it = processingPipeline.begin(); it != processingPipeline.end(); ++it)
+			{
+				result.push_back(std::weak_ptr<IRenderPass>(*it));
+			}
+
+			return result;
 		}
 
     }

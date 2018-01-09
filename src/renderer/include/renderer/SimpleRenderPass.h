@@ -41,6 +41,7 @@
 
 // Our Headers
 #include "IRenderPass.h"
+#include "RenderPasses.h"
 
 namespace monet
 {
@@ -58,6 +59,7 @@ namespace monet
 			virtual ~SimpleRenderPass();
 
 			virtual void Execute(Renderer *renderer);
+			virtual RenderPass GetType();
 		private:
 
 			std::shared_ptr<Texture> texture;

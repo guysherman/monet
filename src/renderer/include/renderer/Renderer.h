@@ -43,6 +43,8 @@
 
 
 // Our Headers
+#include "RenderPasses.h"
+
 
 namespace monet
 {
@@ -67,9 +69,9 @@ namespace monet
 			void BindTexture(std::weak_ptr<Texture> texture);
 			void RenderGeometry(std::weak_ptr<Geometry> geometry);
 
-			void AddRenderPass(std::shared_ptr<IRenderPass> pass);
+			void AddRenderPass(RenderPass pass);
 			void ClearProcessingPipeline();
-
+			std::vector< std::weak_ptr<IRenderPass> > GetProcessingPipeline();
 		private:
 			glm::vec2 viewSize;
 			float imageAspectRatio;

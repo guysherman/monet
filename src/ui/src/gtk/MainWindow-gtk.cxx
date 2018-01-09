@@ -153,8 +153,7 @@ namespace monet
 		{
 			glArea->make_current();
 			renderer = std::unique_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
-			auto pass = std::shared_ptr<monet::renderer::IRenderPass>(new monet::renderer::SimpleRenderPass());
-			renderer->AddRenderPass(pass);
+			//renderer->AddRenderPass(monet::renderer::RenderPass::SIMPLE_RENDER_PASS);
 			
 		}
 

@@ -45,6 +45,7 @@
 #include "../include/renderer/Texture.h"
 #include "../include/renderer/ShaderProgram.h"
 #include "../include/renderer/Renderer.h"
+#include "../include/renderer/RenderPasses.h"
 
 namespace monet
 {
@@ -66,6 +67,11 @@ namespace monet
 			renderer->SetMvpMatrix("matrix", program->GetProgramId(), size.x / size.y);
 			renderer->BindTexture(std::weak_ptr<Texture>(texture));
 			renderer->RenderGeometry(std::weak_ptr<Geometry>(geometry));
+		}
+
+		RenderPass SimpleRenderPass::GetType()
+		{
+			return RenderPass::SIMPLE_RENDER_PASS;
 		}
 	}
 }
