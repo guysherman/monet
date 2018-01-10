@@ -51,8 +51,10 @@ namespace monet
 {
     namespace renderer
 	{
-		SimpleRenderPass::SimpleRenderPass()
+		SimpleRenderPass::SimpleRenderPass(SimpleRenderPassConfig *config)
 		{
+			std::cout << "Creating DemosaicRenderPass for file: " << config->RawFilePath << std::endl;
+			
 			geometry = std::shared_ptr<Geometry>(new Geometry());
 			texture = std::shared_ptr<Texture>(new Texture());
 			program = std::shared_ptr<ShaderProgram>(new ShaderProgram());

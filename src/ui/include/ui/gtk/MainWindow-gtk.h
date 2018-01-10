@@ -70,7 +70,8 @@ namespace monet
 			Gtk::GLArea *glArea;
 
 			void showAbout();
-			
+			void chooseImage();
+			bool loadImage(std::string filePath);
 
 			bool onRender(const Glib::RefPtr<Gdk::GLContext>& context);
 			void onRealize();

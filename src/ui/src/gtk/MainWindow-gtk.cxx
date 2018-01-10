@@ -67,6 +67,7 @@ namespace monet
 			
 			mainActionGroup = Gio::SimpleActionGroup::create();
 			mainActionGroup->add_action("about", sigc::mem_fun(*this, &MainWindowGtk::showAbout));
+			mainActionGroup->add_action("open", sigc::mem_fun(*this, &MainWindowGtk::chooseImage));
 			
 			insert_action_group("app", mainActionGroup);
 
@@ -138,6 +139,54 @@ namespace monet
 		{
 			aboutDialog->show();
 			aboutDialog->present();
+		}
+
+		void MainWindowGtk::chooseImage()
+		{
+			Gtk::FileChooserDialog dialog("Select a raw file to open", Gtk::FILE_CHOOSER_ACTION_OPEN);
+			dialog.set_transient_for(*this);
+			//Add response buttons the the dialog:
+			dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+			dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+			auto filter_raw = Gtk::FileFilter::create();
+			filter_raw->set_name("Raw Files");
+			filter_raw->add_pattern("*.nef");
+			filter_raw->add_pattern("*.NEF");
+			dialog.add_filter(filter_raw);
+
+			int result = dialog.run();
+
+			switch(result)
+			{
+				case Gtk::RESPONSE_CANCEL:
+					std::cerr << "chooseFile canceled" << std::endl;
+					break;
+				case Gtk::RESPONSE_OK:
+				{
+					std::string filename = dialog.get_filename();
+					loadImage(filename);
+					break;
+				}
+			}
+
+			
+
+		}
+
+		bool MainWindowGtk::loadImage(std::string filePath)
+		{
+			glArea->make_current();
+
+			monet::renderer::SimpleRenderPassConfig config;
+			config.RawFilePath = filePath;
+
+			renderer->AddRenderPass(monet::renderer::RenderPass::SIMPLE_RENDER_PASS, &config);
+
+			auto processingPipeline = renderer->GetProcessingPipeline();
+			glArea->queue_draw();
+			return true;
+			
 		}
 
 		bool MainWindowGtk::onRender(const Glib::RefPtr<Gdk::GLContext>& context)

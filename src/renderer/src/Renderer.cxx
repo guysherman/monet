@@ -49,6 +49,7 @@
 #include "../include/renderer/Texture.h"
 #include "../include/renderer/RenderPasses.h"
 #include "../include/renderer/IRenderPass.h"
+#include "../include/renderer/IRenderPassConfig.h"
 #include "../include/renderer/SimpleRenderPass.h"
 
 void openglCallbackFunction(GLenum source,
@@ -240,13 +241,26 @@ namespace monet
 			imageAspectRatio = aspect;
 		}
 
-		void Renderer::AddRenderPass(RenderPass pass)
+		bool Renderer::AddRenderPass(RenderPass pass, IRenderPassConfig *config)
 		{
 			//processingPipeline.push_back(pass);
 			switch (pass) 
 			{
 				case RenderPass::SIMPLE_RENDER_PASS:
-					processingPipeline.push_back(std::shared_ptr<IRenderPass>(new SimpleRenderPass()));
+				{
+					SimpleRenderPassConfig *cfg = dynamic_cast<SimpleRenderPassConfig*>(config);
+					if (cfg != nullptr)
+					{
+						processingPipeline.push_back(std::shared_ptr<IRenderPass>(new SimpleRenderPass(cfg)));
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+					break;
+				}
+					
 			}
 		}
 

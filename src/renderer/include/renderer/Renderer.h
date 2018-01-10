@@ -53,6 +53,7 @@ namespace monet
         class Texture;
 		class Geometry;
 		class IRenderPass;
+		class IRenderPassConfig;
 		
 		class Renderer
         {
@@ -69,7 +70,7 @@ namespace monet
 			void BindTexture(std::weak_ptr<Texture> texture);
 			void RenderGeometry(std::weak_ptr<Geometry> geometry);
 
-			void AddRenderPass(RenderPass pass);
+			bool AddRenderPass(RenderPass pass, IRenderPassConfig *config);
 			void ClearProcessingPipeline();
 			std::vector< std::weak_ptr<IRenderPass> > GetProcessingPipeline();
 		private:
