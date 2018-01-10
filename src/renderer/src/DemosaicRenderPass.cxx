@@ -40,7 +40,7 @@
 
 
 // Our Headers
-#include "../include/renderer/SimpleRenderPass.h"
+#include "../include/renderer/DemosaicRenderPass.h"
 #include "../include/renderer/Geometry.h"
 #include "../include/renderer/Texture.h"
 #include "../include/renderer/ShaderProgram.h"
@@ -51,7 +51,7 @@ namespace monet
 {
     namespace renderer
 	{
-		SimpleRenderPass::SimpleRenderPass(SimpleRenderPassConfig *config)
+		DemosaicRenderPass::DemosaicRenderPass(DemosaicRenderPassConfig *config)
 		{
 			std::cout << "Creating DemosaicRenderPass for file: " << config->RawFilePath << std::endl;
 			
@@ -60,9 +60,9 @@ namespace monet
 			program = std::shared_ptr<ShaderProgram>(new ShaderProgram());
 		}
 
-		SimpleRenderPass::~SimpleRenderPass() {}
+		DemosaicRenderPass::~DemosaicRenderPass() {}
 
-		void SimpleRenderPass::Execute(Renderer *renderer)
+		void DemosaicRenderPass::Execute(Renderer *renderer)
 		{
 			auto size = texture->GetSize();
 			renderer->BindShaderProgram(program->GetProgramId());
@@ -71,9 +71,9 @@ namespace monet
 			renderer->RenderGeometry(std::weak_ptr<Geometry>(geometry));
 		}
 
-		RenderPass SimpleRenderPass::GetType()
+		RenderPass DemosaicRenderPass::GetType()
 		{
-			return RenderPass::SIMPLE_RENDER_PASS;
+			return RenderPass::DEMOSAIC;
 		}
 	}
 }

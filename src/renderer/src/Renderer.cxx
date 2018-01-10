@@ -50,7 +50,7 @@
 #include "../include/renderer/RenderPasses.h"
 #include "../include/renderer/IRenderPass.h"
 #include "../include/renderer/IRenderPassConfig.h"
-#include "../include/renderer/SimpleRenderPass.h"
+#include "../include/renderer/DemosaicRenderPass.h"
 
 void openglCallbackFunction(GLenum source,
 							GLenum type,
@@ -246,12 +246,12 @@ namespace monet
 			//processingPipeline.push_back(pass);
 			switch (pass) 
 			{
-				case RenderPass::SIMPLE_RENDER_PASS:
+				case RenderPass::DEMOSAIC:
 				{
-					SimpleRenderPassConfig *cfg = dynamic_cast<SimpleRenderPassConfig*>(config);
+					DemosaicRenderPassConfig *cfg = dynamic_cast<DemosaicRenderPassConfig*>(config);
 					if (cfg != nullptr)
 					{
-						processingPipeline.push_back(std::shared_ptr<IRenderPass>(new SimpleRenderPass(cfg)));
+						processingPipeline.push_back(std::shared_ptr<IRenderPass>(new DemosaicRenderPass(cfg)));
 						return true;
 					}
 					else

@@ -44,7 +44,7 @@
 #include "../../include/ui/gtk/MainWindow-gtk.h"
 #include <renderer/Renderer.h>
 #include <renderer/IRenderPass.h>
-#include <renderer/SimpleRenderPass.h>
+#include <renderer/DemosaicRenderPass.h>
 
 
 namespace monet
@@ -178,10 +178,10 @@ namespace monet
 		{
 			glArea->make_current();
 
-			monet::renderer::SimpleRenderPassConfig config;
+			monet::renderer::DemosaicRenderPassConfig config;
 			config.RawFilePath = filePath;
 
-			renderer->AddRenderPass(monet::renderer::RenderPass::SIMPLE_RENDER_PASS, &config);
+			renderer->AddRenderPass(monet::renderer::RenderPass::DEMOSAIC, &config);
 
 			auto processingPipeline = renderer->GetProcessingPipeline();
 			glArea->queue_draw();
@@ -202,7 +202,7 @@ namespace monet
 		{
 			glArea->make_current();
 			renderer = std::unique_ptr<monet::renderer::Renderer>(new monet::renderer::Renderer());
-			//renderer->AddRenderPass(monet::renderer::RenderPass::SIMPLE_RENDER_PASS);
+			//renderer->AddRenderPass(monet::renderer::RenderPass::DEMOSAIC);
 			
 		}
 

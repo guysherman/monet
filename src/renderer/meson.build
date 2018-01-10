@@ -4,7 +4,7 @@ renderer_sources = [
 	'src/Geometry.cxx',
 	'src/ShaderProgram.cxx',
 	'src/Texture.cxx',
-	'src/SimpleRenderPass.cxx'
+	'src/DemosaicRenderPass.cxx'
 ]
 renderer_deps = []
 renderer_deps += dependency('glew')

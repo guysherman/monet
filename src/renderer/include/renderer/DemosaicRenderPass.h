@@ -1,5 +1,5 @@
-#ifndef _SIMPLERENDERPASS_H_
-#define _SIMPLERENDERPASS_H_
+#ifndef _DEMOSAICRENDERPASS_H_
+#define _DEMOSAICRENDERPASS_H_
 
 /*
 	Monet is an open-source platform for building GPU-accelerated image
@@ -54,17 +54,17 @@ namespace monet
 		class ShaderProgram;
 		class Renderer;
 		
-		class SimpleRenderPassConfig : public IRenderPassConfig
+		class DemosaicRenderPassConfig : public IRenderPassConfig
 		{
 		public:
 			std::string RawFilePath;
 		};
 
-		class SimpleRenderPass : public IRenderPass
+		class DemosaicRenderPass : public IRenderPass
 		{
 		public:
-			SimpleRenderPass(SimpleRenderPassConfig *config);
-			virtual ~SimpleRenderPass();
+			DemosaicRenderPass(DemosaicRenderPassConfig *config);
+			virtual ~DemosaicRenderPass();
 
 			virtual void Execute(Renderer *renderer);
 			virtual RenderPass GetType();
@@ -80,4 +80,4 @@ namespace monet
 	}
 }
 
-#endif //_SIMPLERENDERPASS_H_
+#endif //_DEMOSAICRENDERPASS_H_
