@@ -36,6 +36,7 @@
 #include <glm/glm.hpp>
 
 
+
 // GTK Headers
 
 
@@ -54,9 +55,9 @@ namespace monet
 		DemosaicRenderPass::DemosaicRenderPass(DemosaicRenderPassConfig *config)
 		{
 			std::cout << "Creating DemosaicRenderPass for file: " << config->RawFilePath << std::endl;
-			
+
 			geometry = std::shared_ptr<Geometry>(new Geometry());
-			texture = std::shared_ptr<Texture>(new Texture());
+			texture = std::shared_ptr<Texture>(new Texture(config->RawFilePath));
 			program = std::shared_ptr<ShaderProgram>(new ShaderProgram());
 		}
 

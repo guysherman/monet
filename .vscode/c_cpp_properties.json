@@ -99,7 +99,9 @@
                 "/usr/include/gdk-pixbuf-2.0",
                 "/usr/include/glib-2.0",
                 "/usr/lib/glib-2.0/include",
-                "${workspaceRoot}/src/util/include"
+                "${workspaceRoot}/src/util/include",
+                "/usr/include/librawspeed",
+                "/usr/lib/librawspeed"
             ],
             "defines": [],
             "browse": {

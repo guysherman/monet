@@ -23,6 +23,7 @@
 
 // C++ Standard Headers
 #include <memory>
+#include <thread>
 
 // C Standard Headers
 
@@ -46,3 +47,4 @@ int main(int argc, char **argv) {
 
 	return app->run(window);
 }
+

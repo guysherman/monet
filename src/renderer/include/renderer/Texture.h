@@ -27,7 +27,7 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <string>
 
 // C Standard Headers
 
@@ -49,7 +49,7 @@ namespace monet
 		class Texture
 		{
 		public:
-			Texture();
+			Texture(std::string filePath);
 			virtual ~Texture();
 
 			GLuint GetTextureId();
