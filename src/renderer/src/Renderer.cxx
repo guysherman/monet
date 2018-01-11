@@ -211,12 +211,12 @@ namespace monet
 			{
 				// -- BIND TEXTURE
 				glActiveTexture( tex->GetTextureUnit() );
-				glBindTexture( GL_TEXTURE_2D, tex->GetTextureId() );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, tex->GetWrapS() );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tex->GetWrapT() );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, tex->GetMagFilter() );
-				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tex->GetMinFilter() );
-				glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex->GetMaxAniso() );
+				glBindTexture( GL_TEXTURE_RECTANGLE, tex->GetTextureId() );
+				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, tex->GetWrapS() );
+				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, tex->GetWrapT() );
+				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, tex->GetMagFilter() );
+				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, tex->GetMinFilter() );
+				glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex->GetMaxAniso() );
 			}
 		}
 
