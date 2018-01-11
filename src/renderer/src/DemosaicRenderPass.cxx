@@ -56,8 +56,8 @@ namespace monet
 		{
 			std::cout << "Creating DemosaicRenderPass for file: " << config->RawFilePath << std::endl;
 
-			geometry = std::shared_ptr<Geometry>(new Geometry());
 			texture = std::shared_ptr<Texture>(new Texture(config->RawFilePath));
+			geometry = std::shared_ptr<Geometry>(new Geometry(texture->GetSize()));
 			program = std::shared_ptr<ShaderProgram>(new ShaderProgram());
 		}
 

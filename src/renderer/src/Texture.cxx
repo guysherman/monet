@@ -87,14 +87,14 @@ namespace monet
 				for (int y = 0; y < height; ++y)
 				{
 					uint8_t *line_src = &data[y * pitch_in_bytes];
-					uint8_t *line_dst = &glData[(height - 1 - y) * sizeof(uint16_t) * width];
+					uint8_t *line_dst = &glData[y * sizeof(uint16_t) * width];
 					memcpy(line_dst, line_src, sizeof(uint16_t) * width);
 				}
 
 				glGenTextures(1, &this->textureId);
 				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, this->textureId);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_R16, width, height, 0, GL_RED, GL_UNSIGNED_SHORT, glData);
+				glBindTexture(GL_TEXTURE_RECTANGLE, this->textureId);
+				glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_R16, width, height, 0, GL_RED, GL_UNSIGNED_SHORT, glData);
 
 				free(glData);
 				glData = nullptr;

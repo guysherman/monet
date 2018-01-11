@@ -33,6 +33,7 @@
 // Boost Headers
 
 // 3rd Party Headers
+#include <glm/glm.hpp>
 
 // GTK Headers
 
@@ -44,17 +45,19 @@ namespace monet
 {
     namespace renderer
 	{
-		Geometry::Geometry()
+		Geometry::Geometry(glm::vec2 size)
 		{
 			GLfloat positions[8] ={ 0.0f,	0.0f,
 									0.0f,   1.0f,
 									1.0f, 	1.0f,
 									1.0f,   0.0f };
 
-			GLfloat tcs[8] 		= { 0.0f, 0.0f,
-									0.0f, 1.0f,
-									1.0f, 1.0f,
-									1.0f, 0.0f };
+			GLfloat tcs[8] 		= { 
+									0.0f, size.y,
+									0.0f, 0.0f,
+									size.x, 0.0f,
+									size.x, size.y
+									};
 
 			GLuint indices[6]		= { 0, 1, 2, 0, 2, 3 };
 

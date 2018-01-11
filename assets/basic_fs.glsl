@@ -1,6 +1,6 @@
 #version 410
 in vec2 texture_coordinates;
-uniform sampler2D basic_texture;
+uniform sampler2DRect basic_texture;
 
 out vec4 frag_colour;
 void main () {

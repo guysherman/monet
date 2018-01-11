@@ -35,6 +35,7 @@
 // Boost Headers
 
 // 3rd Party Headers
+#include <glm/glm.hpp>
 
 // GTK Headers
 
@@ -48,7 +49,7 @@ namespace monet
 		class Geometry
 		{
 		public:
-			Geometry();
+			Geometry(glm::vec2 size);
 			virtual ~Geometry();
 			GLuint GetVaoId();
 			GLuint GetNumElements();
