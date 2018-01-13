@@ -49,11 +49,13 @@ namespace monet
 		class Texture
 		{
 		public:
-			Texture(std::string filePath);
+			//Texture(std::string filePath);
+			Texture(uint8_t *data, uint32_t width, uint32_t height, GLuint textureUnit, GLuint target, GLuint internalFormat, GLuint format, GLuint type, GLuint minMag, GLuint wrap);
 			virtual ~Texture();
 
 			GLuint GetTextureId();
 			GLuint GetTextureUnit();
+			GLuint GetTarget();
 			GLenum GetWrapS();
 			GLenum GetWrapT();
 			GLenum GetMinFilter();
@@ -64,6 +66,10 @@ namespace monet
 		
 		private:
 			GLuint textureId;
+			GLuint textureUnit;
+			GLuint target;
+			GLuint minMag;
+			GLuint wrap;
 
 			glm::vec2 size;
 		};

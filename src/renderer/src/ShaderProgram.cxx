@@ -27,6 +27,7 @@
 // C++ Standard Headers
 #include <string>
 #include <iostream>
+#include <vector>
 // C Standard Headers
 
 
@@ -46,20 +47,20 @@ namespace monet
 {
     namespace renderer
 	{
-		ShaderProgram::ShaderProgram()
+		ShaderProgram::ShaderProgram(std::string vsName, std::string fsName)
 		{
 			this->vertexShaderId = 0;
 			this->fragmentShaderId = 0;
 			this->programId = 0;
 			
 			auto file = monet::util::File::GetInstance();
-			auto vsText = file->GetDataAsString("assets/basic_vs.glsl");
+			auto vsText = file->GetDataAsString(vsName);
 			auto vsCstr = vsText.c_str();
 			this->vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 			glShaderSource(this->vertexShaderId, 1, &vsCstr, nullptr);
 			glCompileShader(this->vertexShaderId);
 
-			auto fsText = file->GetDataAsString("assets/basic_fs.glsl");
+			auto fsText = file->GetDataAsString(fsName);
 			auto fsCstr = fsText.c_str();
 			this->fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 			glShaderSource(this->fragmentShaderId, 1, &fsCstr, nullptr);
@@ -69,6 +70,24 @@ namespace monet
 			glAttachShader(this->programId, this->fragmentShaderId);
 			glAttachShader(this->programId, this->vertexShaderId);
 			glLinkProgram(this->programId);
+
+			GLint isLinked = 0;
+			glGetProgramiv(this->programId, GL_LINK_STATUS, &isLinked);
+
+			if (GL_FALSE == isLinked)
+			{
+				GLint maxLength = 0;
+				glGetProgramiv(this->programId, GL_INFO_LOG_LENGTH, &maxLength);
+
+				// The maxLength includes the NULL character
+				std::vector<GLchar> infoLog(maxLength);
+				glGetProgramInfoLog(this->programId, maxLength, &maxLength, &infoLog[0]);
+
+				std::cerr << "Shader Error: " << &infoLog[0] << std::endl;
+			}
+			
+
+			
 		}
 
 		ShaderProgram::~ShaderProgram()

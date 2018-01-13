@@ -27,7 +27,7 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <memory>
 
 // C Standard Headers
 
@@ -41,6 +41,7 @@
 
 // Our Headers
 #include "RenderPasses.h"
+#include "Texture.h"
 
 namespace monet
 {
@@ -54,8 +55,10 @@ namespace monet
 			IRenderPass() {}
 			virtual ~IRenderPass() {}
 
-			virtual void Execute(Renderer *renderer) = 0;
+			virtual void Execute(Renderer *renderer, std::shared_ptr<IRenderPass> previous) = 0;
 			virtual RenderPass GetType() = 0;
+
+			virtual std::weak_ptr<Texture> GetOutputTexture() = 0;
 
 		};
 	}

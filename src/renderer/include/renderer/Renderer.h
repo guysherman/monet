@@ -67,8 +67,14 @@ namespace monet
 
 			void BindShaderProgram(GLuint programId);
 			void SetMvpMatrix(std::string uniformName, GLuint programId, float imageViewAspectRatio);
+			void SetMvpMatrixForRenderTexture(std::string uniformName, GLuint programId);
 			void BindTexture(std::weak_ptr<Texture> texture);
 			void RenderGeometry(std::weak_ptr<Geometry> geometry);
+			void MapTextureUnit(GLuint textureUnit, std::string uniformName, GLuint programId);
+			void BindRenderTexture(std::weak_ptr<Texture> texture, GLuint *fb, GLenum *buffers);
+			void GetCurrentFboIds(GLint *dfbo, GLint *rfbo);
+			void DeleteFrameBuffer(GLuint *fbId);
+			void BindDefaultFrameBuffers(GLint *dfbo, GLint *rfbo);
 
 			bool AddRenderPass(RenderPass pass, IRenderPassConfig *config);
 			void ClearProcessingPipeline();

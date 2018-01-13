@@ -51,6 +51,7 @@
 #include "../include/renderer/IRenderPass.h"
 #include "../include/renderer/IRenderPassConfig.h"
 #include "../include/renderer/DemosaicRenderPass.h"
+#include "../include/renderer/DisplayRenderPass.h"
 
 void openglCallbackFunction(GLenum source,
 							GLenum type,
@@ -154,10 +155,13 @@ namespace monet
 			glClearColor(0x30 / 255.0f, 0x30 / 255.0f, 0x30 / 255.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+			std::shared_ptr<IRenderPass> prev = nullptr;
+
 			for (auto it = processingPipeline.begin(); it != processingPipeline.end(); ++it)
 			{
 				auto pass = *it;
-				pass->Execute(this);
+				pass->Execute(this, prev);
+				prev = pass;
 			}
 
 			glFlush();
@@ -204,6 +208,26 @@ namespace monet
 			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
 		}
 
+		void Renderer::SetMvpMatrixForRenderTexture(std::string uniformName, GLuint programId)
+		{
+			auto model = glm::mat4(1.0f);
+			auto view = glm::lookAt(glm::vec3(0.5f, 0.5f, 1.0f), glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			
+			float l, r, t, b;
+			l = -0.5f;
+			r = 0.5f;
+			t = 0.5f;
+			b = -0.5f;
+
+			auto projection = glm::ortho(l, r, t, b, -1.0f, 1.0f);
+
+			auto mvp = projection * view * model;
+
+			int matrix_location = glGetUniformLocation (programId, uniformName.c_str());
+			glUniformMatrix4fv(matrix_location, 1, GL_FALSE, glm::value_ptr(mvp));
+
+		}
+
 		void Renderer::BindTexture(std::weak_ptr<Texture> texture)
 		{
 			auto tex = texture.lock();
@@ -211,12 +235,12 @@ namespace monet
 			{
 				// -- BIND TEXTURE
 				glActiveTexture( tex->GetTextureUnit() );
-				glBindTexture( GL_TEXTURE_RECTANGLE, tex->GetTextureId() );
-				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_S, tex->GetWrapS() );
-				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_WRAP_T, tex->GetWrapT() );
-				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAG_FILTER, tex->GetMagFilter() );
-				glTexParameteri( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MIN_FILTER, tex->GetMinFilter() );
-				glTexParameterf( GL_TEXTURE_RECTANGLE, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex->GetMaxAniso() );
+				glBindTexture( tex->GetTarget(), tex->GetTextureId() );
+				glTexParameteri( tex->GetTarget(), GL_TEXTURE_WRAP_S, tex->GetWrapS() );
+				glTexParameteri( tex->GetTarget(), GL_TEXTURE_WRAP_T, tex->GetWrapT() );
+				glTexParameteri( tex->GetTarget(), GL_TEXTURE_MAG_FILTER, tex->GetMagFilter() );
+				glTexParameteri( tex->GetTarget(), GL_TEXTURE_MIN_FILTER, tex->GetMinFilter() );
+				glTexParameterf( tex->GetTarget(), GL_TEXTURE_MAX_ANISOTROPY_EXT, tex->GetMaxAniso() );
 			}
 		}
 
@@ -229,6 +253,43 @@ namespace monet
 				glBindVertexArray(geo->GetVaoId());
 				glDrawElements(GL_TRIANGLES, geo->GetNumElements(), GL_UNSIGNED_INT, (void *)0);
 			}
+		}
+
+		void Renderer::MapTextureUnit(GLuint textureUnit, std::string uniformName, GLuint programId)
+		{
+			GLuint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+			glUniform1i(uniformLocation, textureUnit);
+		}
+
+		void Renderer::BindRenderTexture(std::weak_ptr<Texture> texture, GLuint *fb, GLenum *buffers)
+		{
+			glGenFramebuffers(1, fb);
+			glBindFramebuffer(GL_FRAMEBUFFER, *fb);
+
+			auto tex = texture.lock();
+			if (nullptr != tex)
+			{
+				glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, tex->GetTextureId(), 0);
+				*buffers = GL_COLOR_ATTACHMENT0;
+				glDrawBuffers(1, buffers);
+			}
+		}
+
+		void Renderer::GetCurrentFboIds(GLint *dfbo, GLint *rfbo)
+		{
+			glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, dfbo);
+			glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, rfbo);
+		}
+
+		void Renderer::DeleteFrameBuffer(GLuint *fbId)
+		{
+			glDeleteFramebuffers(1, fbId);
+		}
+
+		void Renderer::BindDefaultFrameBuffers(GLint *dfbo, GLint *rfbo)
+		{
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *dfbo);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, *rfbo);
 		}
 
 		void Renderer::ResizeView(float width, float height)
@@ -258,6 +319,12 @@ namespace monet
 					{
 						return false;
 					}
+					break;
+				}
+				case RenderPass::DISPLAY:
+				{
+					processingPipeline.push_back(std::shared_ptr<IRenderPass>(new DisplayRenderPass()));
+					return true;
 					break;
 				}
 					

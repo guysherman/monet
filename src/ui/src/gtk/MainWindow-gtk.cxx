@@ -182,8 +182,9 @@ namespace monet
 			config.RawFilePath = filePath;
 
 			renderer->AddRenderPass(monet::renderer::RenderPass::DEMOSAIC, &config);
+			renderer->AddRenderPass(monet::renderer::RenderPass::DISPLAY, nullptr);
 
-			auto processingPipeline = renderer->GetProcessingPipeline();
+			//auto processingPipeline = renderer->GetProcessingPipeline();
 			glArea->queue_draw();
 			return true;
 			

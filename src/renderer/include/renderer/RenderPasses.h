@@ -47,7 +47,8 @@ namespace monet
 	{
 		enum class RenderPass
 		{
-			DEMOSAIC
+			DEMOSAIC,
+			DISPLAY
 		};
 
 	}

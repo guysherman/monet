@@ -52,12 +52,21 @@ namespace monet
 									1.0f, 	1.0f,
 									1.0f,   0.0f };
 
+			// GLfloat tcs[8] 		= { 
+			// 						3500.0f, 2400.0f,
+			// 						3500.0f, 2300.0f,
+			// 						3600.0f, 2300.0f,
+			// 						3600.0f, 2400.0f
+			// 						};
+
 			GLfloat tcs[8] 		= { 
 									0.0f, size.y,
 									0.0f, 0.0f,
 									size.x, 0.0f,
 									size.x, size.y
 									};
+
+
 
 			GLuint indices[6]		= { 0, 1, 2, 0, 2, 3 };
 

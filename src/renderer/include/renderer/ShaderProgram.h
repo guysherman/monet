@@ -27,7 +27,7 @@
 #include <GL/glew.h>
 
 // C++ Standard Headers
-
+#include <string>
 
 // C Standard Headers
 
@@ -48,7 +48,7 @@ namespace monet
 		class ShaderProgram
 		{
 		public:
-			ShaderProgram();
+			ShaderProgram(std::string vsName, std::string fsName);
 			virtual ~ShaderProgram();
 
 			GLuint GetProgramId();

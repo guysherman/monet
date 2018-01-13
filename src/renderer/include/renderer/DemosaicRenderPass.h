@@ -66,11 +66,15 @@ namespace monet
 			DemosaicRenderPass(DemosaicRenderPassConfig *config);
 			virtual ~DemosaicRenderPass();
 
-			virtual void Execute(Renderer *renderer);
+			virtual void Execute(Renderer *renderer, std::shared_ptr<IRenderPass> previous);
 			virtual RenderPass GetType();
+
+			virtual std::weak_ptr<Texture> GetOutputTexture();
 		private:
 
 			std::shared_ptr<Texture> texture;
+			std::shared_ptr<Texture> mask;
+			std::shared_ptr<Texture> renderTexture;
 			std::shared_ptr<Geometry> geometry;
 			std::shared_ptr<ShaderProgram> program;
 
