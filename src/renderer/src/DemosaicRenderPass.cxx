@@ -203,6 +203,7 @@ namespace monet
 			auto size = texture->GetSize();
 			renderer->BindShaderProgram(program->GetProgramId());
 			renderer->BindRenderTexture(std::weak_ptr<Texture>(renderTexture), &frameBufferId, &drawBuffer);
+			renderer->SetViewport(0, 0, size.x, size.y);
 			renderer->MapTextureUnit(0, "basic_texture", program->GetProgramId());
 			renderer->MapTextureUnit(1, "mask_texture", program->GetProgramId());
 			renderer->SetMvpMatrixForRenderTexture("matrix", program->GetProgramId());
@@ -211,6 +212,7 @@ namespace monet
 			renderer->RenderGeometry(std::weak_ptr<Geometry>(geometry));
 			renderer->DeleteFrameBuffer(&frameBufferId);
 			renderer->BindDefaultFrameBuffers(&dfbo, &rfbo);
+			renderer->RestoreViewportToViewSize();
 		}
 
 		RenderPass DemosaicRenderPass::GetType()

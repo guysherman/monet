@@ -297,6 +297,16 @@ namespace monet
 			viewSize = glm::vec2(width, height);
 		}
 
+		void Renderer::SetViewport(float x, float y, float width, float height)
+		{
+			glViewport(x, y, width, height);
+		}
+
+		void Renderer::RestoreViewportToViewSize()
+		{
+			glViewport(0, 0, viewSize.x, viewSize.y);
+		}
+
 		void Renderer::SetImageAspectRatio(float aspect)
 		{
 			imageAspectRatio = aspect;

@@ -31,17 +31,17 @@ void main () {
 
 	float r = 	mask_value.r * c +
 				mask_value.b * diagonal +
-				mask_value.g * horizontal;
+				mask_value.g * vertical;
 
 	float g =  	mask_value.g * c +
 				mask_value.b * adjacent +
 				mask_value.r * adjacent;
 
 	float b = 	mask_value.b * c +
-				mask_value.g * vertical +
+				mask_value.g * horizontal +
 				mask_value.r * diagonal;
 
 
-	frag_colour = vec4(r, g, b, 1.0);
+	frag_colour = vec4(r * 1.819, g, b * 1.484, 1.0) * 2;
 	//frag_colour = mask_value;
 }

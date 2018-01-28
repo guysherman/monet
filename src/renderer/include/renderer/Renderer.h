@@ -75,6 +75,8 @@ namespace monet
 			void GetCurrentFboIds(GLint *dfbo, GLint *rfbo);
 			void DeleteFrameBuffer(GLuint *fbId);
 			void BindDefaultFrameBuffers(GLint *dfbo, GLint *rfbo);
+			void SetViewport(float x, float y, float width, float height);
+			void RestoreViewportToViewSize();
 
 			bool AddRenderPass(RenderPass pass, IRenderPassConfig *config);
 			void ClearProcessingPipeline();
