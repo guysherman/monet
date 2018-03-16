@@ -10,7 +10,8 @@ renderer_sources = [
 renderer_deps = []
 renderer_deps += dependency('glew')
 renderer_deps += dependency('glm')
-renderer_deps += dependency('rawspeed')
+renderer_deps += dependency('zlib')
+renderer_deps += dependency('libjpeg')
 
 code = '''#include<stdio.h>
 #include <pugixml.hpp>
@@ -29,6 +30,7 @@ endif
 pugi_xml = declare_dependency(link_args: '-lpugixml')
 renderer_deps += pugi_xml
 renderer_deps += util_module
+renderer_deps += rawspeed_dep
 
 renderer_link_args = []
 if host_machine.system() == 'darwin'

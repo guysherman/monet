@@ -30,16 +30,19 @@ void main () {
 	vec4 mask_value = texture(mask_texture, 0.5 * texture_coordinates);
 
 	float r = 	mask_value.r * c +
-				mask_value.b * diagonal +
-				mask_value.g * vertical;
-
-	float g =  	mask_value.g * c +
-				mask_value.b * adjacent +
-				mask_value.r * adjacent;
-
-	float b = 	mask_value.b * c +
 				mask_value.g * horizontal +
-				mask_value.r * diagonal;
+				mask_value.b * diagonal +
+				mask_value.a * vertical;
+
+	float g =  	mask_value.r * adjacent +
+				mask_value.g * c +
+				mask_value.b * adjacent +
+				mask_value.a * c;
+
+	float b = 	mask_value.r * diagonal +
+				mask_value.g * vertical +
+				mask_value.b * c +
+				mask_value.a * horizontal;
 
 
 	frag_colour = vec4(r * 1.819, g, b * 1.484, 1.0) * 2;

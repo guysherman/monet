@@ -1,0 +1,3 @@
+[submodule "dep/rawspeed"]
+	path = dep/rawspeed
+	url = git@github.com:darktable-org/rawspeed.git

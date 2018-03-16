@@ -121,7 +121,7 @@ namespace monet
 							{
 								case rawspeed::CFA_RED:
 								{
-									maskData.push_back(0xFF);
+									maskData.push_back(0x00);
 									maskData.push_back(0x00);
 									maskData.push_back(0x00);
 									maskData.push_back(0xFF);
@@ -129,15 +129,26 @@ namespace monet
 								}
 								case rawspeed::CFA_GREEN:
 								{
-									maskData.push_back(0xFF);
-									maskData.push_back(0x00);
-									maskData.push_back(0xFF);
-									maskData.push_back(0x00);
+									int idx = (y * cfa_width + x);
+									if (idx < 2) 
+									{
+										maskData.push_back(0x00);
+										maskData.push_back(0x00);
+										maskData.push_back(0xFF);
+										maskData.push_back(0x00);
+									}
+									else
+									{
+										maskData.push_back(0xFF);
+										maskData.push_back(0x00);
+										maskData.push_back(0x00);
+										maskData.push_back(0x00);
+									}									
 									break;
 								}
 								case rawspeed::CFA_BLUE:
 								{
-									maskData.push_back(0xFF);
+									maskData.push_back(0x00);
 									maskData.push_back(0xFF);
 									maskData.push_back(0x00);
 									maskData.push_back(0x00);
