@@ -357,6 +357,24 @@ namespace monet
 			return result;
 		}
 
+		template <>	void Renderer::SetUniformValue(std::string uniformName, GLuint programId, float value)
+		{
+			GLuint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+			glUniform1f(uniformLocation, value);
+		}
+
+		template <>	void Renderer::SetUniformValue(std::string uniformName, GLuint programId, int32_t value)
+		{
+			GLuint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+			glUniform1i(uniformLocation, value);
+		}
+
+		template <>	void Renderer::SetUniformValue(std::string uniformName, GLuint programId, uint32_t value)
+		{
+			GLuint uniformLocation = glGetUniformLocation(programId, uniformName.c_str());
+			glUniform1ui(uniformLocation, value);
+		}
+
     }
 }
 

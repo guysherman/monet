@@ -1,6 +1,5 @@
-#ifndef _I_RENDERPASS_H_
-#define _I_RENDERPASS_H_
-
+#ifndef _RENDERPASS_PARAMETER_H_
+#define _RENDERPASS_PARAMETER_H_
 /*
 	Monet is an open-source platform for building GPU-accelerated image
 	processing applications.
@@ -23,11 +22,10 @@
 	Contact the author via https://github.com/guysherman
 */
 
-// GLEW
-#include <GL/glew.h>
 
 // C++ Standard Headers
-#include <memory>
+#include <functional>
+#include <string>
 
 // C Standard Headers
 
@@ -36,36 +34,57 @@
 
 // 3rd Party Headers
 
+
 // GTK Headers
 
 
 // Our Headers
-#include "RenderPasses.h"
-#include "Texture.h"
+
 
 
 namespace monet
 {
-    namespace renderer
+	namespace renderer
 	{
-		class Renderer;
-		class RenderPassParameter;
-		
-		class IRenderPass
+		class RenderPassParameter
 		{
 		public:
-			IRenderPass() {}
-			virtual ~IRenderPass() {}
+			RenderPassParameter(std::string name, std::function<void(void)> changedCallback) : parameterName(name), changedCallback(changedCallback) {}
+			virtual ~RenderPassParameter() {}
 
-			virtual void Execute(Renderer *renderer, std::shared_ptr<IRenderPass> previous) = 0;
-			virtual RenderPass GetType() = 0;
+		protected:
+			std::string parameterName;
+			std::function<void(void)> changedCallback;
+			
 
-			virtual std::weak_ptr<Texture> GetOutputTexture() = 0;
+		};
 
-			//virtual std::vector< std::weak_ptr<RenderPassParameter> > GetParameters() = 0;
+		template <class TValue>
+		class TypedRenderPassParameter : public RenderPassParameter
+		{
+		public:
+			TypedRenderPassParameter(std::string name, TValue value, std::function<void(void)> changedCallback) : RenderPassParameter(name, changedCallback), value(value)
+			{
 
+			}
+
+			virtual ~TypedRenderPassParameter() {}
+
+			TValue GetValue()
+			{
+				return value;
+			}
+
+			void SetValue(TValue value)
+			{
+				this->value = value;
+				changedCallback();
+			}
+
+		protected:
+			TValue value;
 		};
 	}
 }
 
-#endif //_I_RENDERPASS_H_
+#endif // _RENDERPASS_PARAMETER_H_

@@ -44,6 +44,7 @@
 #include "IRenderPass.h"
 #include "IRenderPassConfig.h"
 #include "RenderPasses.h"
+#include "RenderPassParameter.h"
 
 namespace monet
 {
@@ -77,6 +78,10 @@ namespace monet
 			std::shared_ptr<Texture> renderTexture;
 			std::shared_ptr<Geometry> geometry;
 			std::shared_ptr<ShaderProgram> program;
+
+			std::shared_ptr< TypedRenderPassParameter< float > > wbRed;
+			std::shared_ptr< TypedRenderPassParameter< float > > wbGreen;
+			std::shared_ptr< TypedRenderPassParameter< float > > wbBlue;
 
 		};
 

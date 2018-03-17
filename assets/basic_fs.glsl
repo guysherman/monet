@@ -6,6 +6,7 @@ in vec4 tc_n_s;
 in vec4 tc_e_w;
 uniform sampler2DRect basic_texture;
 uniform sampler2D mask_texture;
+uniform float wbRed, wbGreen, wbBlue;
 
 layout (location=0) out vec4 frag_colour;
 void main () {
@@ -45,6 +46,6 @@ void main () {
 				mask_value.a * horizontal;
 
 
-	frag_colour = vec4(r * 1.819, g, b * 1.484, 1.0) * 2;
+	frag_colour = vec4(r * wbRed, g * wbGreen, b * wbBlue, 1.0) * 2;
 	//frag_colour = mask_value;
 }

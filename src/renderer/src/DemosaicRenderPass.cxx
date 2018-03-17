@@ -49,6 +49,7 @@
 #include "../include/renderer/ShaderProgram.h"
 #include "../include/renderer/Renderer.h"
 #include "../include/renderer/RenderPasses.h"
+#include "../include/renderer/RenderPassParameter.h"
 
 int rawspeed_get_number_of_processor_cores()
 {
@@ -88,6 +89,11 @@ namespace monet
 				int width = raw->dim.x;
 				int height = raw->dim.y;
 				int pitch_in_bytes = raw->pitch;
+
+				wbRed = std::shared_ptr< TypedRenderPassParameter< float > >(new TypedRenderPassParameter<float>("Red", raw->metadata.wbCoeffs[0], nullptr));
+				wbGreen = std::shared_ptr< TypedRenderPassParameter< float > >(new TypedRenderPassParameter<float>("Green", raw->metadata.wbCoeffs[1], nullptr));
+				wbBlue = std::shared_ptr< TypedRenderPassParameter< float > >(new TypedRenderPassParameter<float>("Blue", raw->metadata.wbCoeffs[2], nullptr));
+
 				
 				
 				uint8_t *glData = (uint8_t *)malloc(width * height * sizeof(uint16_t));
@@ -200,6 +206,8 @@ namespace monet
 			));
 			geometry = std::shared_ptr<Geometry>(new Geometry(texture->GetSize()));
 			program = std::shared_ptr<ShaderProgram>(new ShaderProgram("assets/basic_vs.glsl", "assets/basic_fs.glsl"));
+
+			
 		}
 
 		DemosaicRenderPass::~DemosaicRenderPass() {}
@@ -220,6 +228,9 @@ namespace monet
 			renderer->SetMvpMatrixForRenderTexture("matrix", program->GetProgramId());
 			renderer->BindTexture(std::weak_ptr<Texture>(texture));
 			renderer->BindTexture(std::weak_ptr<Texture>(mask));
+			renderer->SetUniformValue("wbRed", program->GetProgramId(), wbRed->GetValue());
+			renderer->SetUniformValue("wbGreen", program->GetProgramId(), wbGreen->GetValue());
+			renderer->SetUniformValue("wbBlue", program->GetProgramId(), wbBlue->GetValue());
 			renderer->RenderGeometry(std::weak_ptr<Geometry>(geometry));
 			renderer->DeleteFrameBuffer(&frameBufferId);
 			renderer->BindDefaultFrameBuffers(&dfbo, &rfbo);
