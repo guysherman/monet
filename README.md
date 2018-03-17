@@ -41,6 +41,7 @@ cmake .. -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make
 popd
 
+meson build
 ninja -C build
 ```
 
