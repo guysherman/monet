@@ -11,33 +11,41 @@ So, my basic goals for now are:
 
 ## Current Status
 
-Brand new, pretty much nothing to see here. Only builds on linux right now.
+Brand new, pretty much nothing to see here. Only builds on linux right now. Can demosaic images from Nikon cameras (and maybe others if they have exactly the same bayer filter), has hard-coded white-balance settings.
 
 ## Building
 
 ### Linux
 
-Get the deps:
-* Python
+Get these deps via your package manager:
 * GLEW
 * GLFW
 * GLM
-* cpp-check
-* libpng
-* libtga
-* BOOST   (I'm planning on getting rid of this one...)
+* libjpg
+* zlib
+* pugixml
 * GTKMM 3.0
+* meson
+* ninja
+* CMAKE
+* make
 
 
 Clone the source, then:
 
 ```
-./waf configure
-./waf
+git submodule update --init
+mkdir -p dep/rawspeed/build
+pushd dep/rawspeed/build
+cmake .. -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
+make
+popd
+
+ninja -C build
 ```
 
 To run:
 
 ```
-./build/src/app/monet-photo
+./build/monet-photo
 ```

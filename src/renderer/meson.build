@@ -21,7 +21,7 @@ int main(int argc, char **argv) {return 0;}
 '''
 compiler = meson.get_compiler('cpp')
 pugi_headers_exist = compiler.compiles(code, name : 'pugixml headers')
-pugi_lib_exists = compiler.links(code, args: '-lpugixml', name: 'pugxml lib')
+pugi_lib_exists = compiler.links(code, args: '-lpugixml', name: 'pugixml lib')
 
 if not (pugi_headers_exist and pugi_lib_exists)
 	error('pugixml seems to be missing!')
